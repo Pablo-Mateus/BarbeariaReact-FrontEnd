@@ -1,0 +1,13 @@
+footer {
+  background-color: #2a5298;
+  padding: 20px 0;
+  text-align: center;
+  color: white;
+}
+
+.footerBg h1 {
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  margin: 0;
+}

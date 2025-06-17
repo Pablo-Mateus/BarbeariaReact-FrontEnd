@@ -1,0 +1,25 @@
+body,
+html,
+.pai {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  padding: 20px;
+}
+
+.imagemLogo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}

@@ -1,80 +1,78 @@
 import React from "react";
-import useFetch from "./useFetch";
-
+import Header from "./utilitarios/Header";
+import Footer from "./utilitarios/Footer";
+import styles from "./styles/App.module.css";
+import global from "./styles/Global.module.css";
+import { Helmet } from "react-helmet";
 function App() {
-  const { data, error, request, resposta } = useFetch();
-  const [form, setForm] = React.useState({
-    name: "",
-    sobrenome: "",
-    endereco: "",
-    telefone: "",
-  });
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    try {
-      request("http://localhost:3000/dados", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  function handleChange({ target }) {
-    const { id, value } = target;
-    setForm({ ...form, [id]: value });
-  }
-
   return (
-    <>
-      <form action="" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="">
-            Nome
-            <input
-              id="name"
-              type="text"
-              value={form.nome}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="">
-            Sobrenome
-            <input id="sobrenome" type="text" onChange={handleChange} />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="">
-            Endereço
-            <input
-              id="endereco"
-              type="text"
-              onChange={handleChange}
-              value={form.endereco}
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="">
-            Telefone
-            <input
-              id="telefone"
-              type="text"
-              onChange={handleChange}
-              value={form.telefone}
-            />
-          </label>
-        </div>
-        <button>Enviar</button>
-      </form>
-    </>
+    <div className={global.pai}>
+      <Helmet>
+        <title>Home Barbearia</title>
+        <meta name="Página inicial barbearia" />
+      </Helmet>
+      <Header />
+      <main className={`${styles.bgServicos}`}>
+        <section className={`${global.container} ${styles.servicos}`}>
+          <div>
+            <h1>Conheça os nossos serviços</h1>
+          </div>
+          <div className={`${styles.conteudoServicos}`}>
+            <ul>
+              <li>
+                <h2>Corte</h2>
+                <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
+                <div className="pagamento">
+                  <h3 className="avulso">
+                    Avulso <span>R$35</span>
+                  </h3>
+                  <h3 className="avulso">
+                    Mensal <span>R$35</span>
+                  </h3>
+                </div>
+              </li>
+              <li>
+                <h2>Corte + barba</h2>
+                <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
+                <div className="pagamento">
+                  <h3 className="avulso">
+                    Avulso <span>R$35</span>
+                  </h3>
+                  <h3 className="avulso">
+                    Mensal <span>R$35</span>
+                  </h3>
+                </div>
+              </li>
+              <li>
+                <h2>barba + sobrancelha</h2>
+                <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
+                <div className="pagamento">
+                  <h3 className="avulso">
+                    Avulso <span>R$35</span>
+                  </h3>
+                  <h3 className="avulso">
+                    Mensal <span>R$35</span>
+                  </h3>
+                </div>
+              </li>
+              <li>
+                <h2>Pezinho</h2>
+                <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
+                <div className="pagamento">
+                  <h3 className="avulso">
+                    Avulso <span>R$35</span>
+                  </h3>
+                  <h3 className="avulso">
+                    Mensal <span>R$35</span>
+                  </h3>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
   );
 }
 

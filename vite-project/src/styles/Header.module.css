@@ -1,0 +1,33 @@
+.headerMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.menuBarber ul {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuBarber ul li {
+  background: #ffffff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.menuBarber ul li:hover {
+  background-color: #3799d4;
+}
+
+.menuBarber ul li a {
+  text-decoration: none;
+  color: inherit;
+}
