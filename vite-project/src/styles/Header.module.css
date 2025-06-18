@@ -15,7 +15,9 @@
   margin: 0;
 }
 
-.menuBarber ul li {
+.NavLink {
+  text-decoration: none;
+  color: inherit;
   background: #ffffff;
   padding: 10px 15px;
   border-radius: 8px;
@@ -23,11 +25,6 @@
   transition: all 0.3s;
 }
 
-.menuBarber ul li:hover {
+.NavLink:hover {
   background-color: #3799d4;
-}
-
-.menuBarber ul li a {
-  text-decoration: none;
-  color: inherit;
 }

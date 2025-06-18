@@ -1,12 +1,17 @@
 body,
-html,
-.pai {
-  height: 100vh;
+html {
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   margin: 0;
   font-family: "Poppins", sans-serif;
   color: #333;
+}
+
+.pai {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
