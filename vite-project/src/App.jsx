@@ -6,15 +6,20 @@ import Register from "./Pages/Register";
 import HomePage from "./Pages/HomePage";
 import Login from "./Pages/Login";
 import global from "./styles/Global.module.css";
+import PrivateRoute from "./Components/PrivateRoute.jsx";
+import Logado from "./Pages/Logado";
 
 function App() {
   return (
     <div className={global.pai}>
       <Header />
       <Routes>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="/register" element={<Register />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/logado" element={<Logado />} />
+        </Route>
       </Routes>
       <Footer />
     </div>

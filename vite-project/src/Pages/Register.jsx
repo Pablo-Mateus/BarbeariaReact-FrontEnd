@@ -5,6 +5,18 @@ import register from "../styles/Register.module.css";
 const Register = () => {
   const [email, setEmail] = React.useState("");
   const [telefone, setTelefone] = React.useState("");
+  const [nome, setNome] = React.useState("");
+  const [senha, setSenha] = React.useState("");
+  const [confirmarsenha, setConfirmarSenha] = React.useState("");
+
+  const form = {
+    email,
+    telefone,
+    nome,
+    senha,
+    confirmarsenha,
+  };
+
   const [resposta, setResposta] = React.useState("");
 
   function validarEmail({ target }) {
@@ -43,9 +55,18 @@ const Register = () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const response = await fetch("/auth/register",{
-      
-    })
+    try {
+      const response = await fetch("http://localhost:5000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      const data = await response.json();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -54,12 +75,15 @@ const Register = () => {
         <h1>REGISTRE-SE</h1>
         <form id="formulario" onSubmit={handleSubmit}>
           <div>
-            <label for="name">Nome de usuário</label>
+            <label htmlFor="name">Nome de usuário</label>
             <input
               type="text"
               id="name"
               name="name"
               placeholder="Nome de usuário"
+              onChange={({ target }) => {
+                setNome(target.value);
+              }}
             />
           </div>
           <div>
@@ -92,6 +116,7 @@ const Register = () => {
               id="password"
               name="password"
               placeholder="Senha"
+              onChange={({ target }) => setSenha(target.value)}
             />
           </div>
           <div>
@@ -101,6 +126,7 @@ const Register = () => {
               id="confirmpassword"
               name="confirmpassword"
               placeholder="Confirmar senha"
+              onChange={({ target }) => setConfirmarSenha(target.value)}
             />
           </div>
           <button className="botao" type="submit">
