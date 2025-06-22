@@ -4,8 +4,8 @@ import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import { NavLink } from "react-router-dom";
 
-const Header = (...props) => {
-  if (window.location.href === "http://localhost:5173/Logado") {
+const Header = () => {
+  if (window.location.href === "http://localhost:5173/logado") {
     return null;
   }
   return (

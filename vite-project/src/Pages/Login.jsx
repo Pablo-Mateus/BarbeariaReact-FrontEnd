@@ -28,6 +28,7 @@ const Login = () => {
       console.log(dados);
       setResposta(dados.message);
       if (response.ok) {
+        localStorage.setItem("token", dados.token);
         window.location.href = dados.redirect;
       }
     } catch (err) {
@@ -37,6 +38,7 @@ const Login = () => {
 
   return (
     <>
+      
       <main>
         <h1>Login</h1>
         <form id="formulario" onSubmit={handleAuth}>
