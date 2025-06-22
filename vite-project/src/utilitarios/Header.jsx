@@ -4,7 +4,10 @@ import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import { NavLink } from "react-router-dom";
 
-const Header = () => {
+const Header = (...props) => {
+  if (window.location.href === "http://localhost:5173/Logado") {
+    return null;
+  }
   return (
     <header className={`${global.container}`}>
       <div className={`${header.headerMenu}`}>

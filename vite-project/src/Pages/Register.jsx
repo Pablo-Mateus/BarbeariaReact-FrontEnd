@@ -8,7 +8,7 @@ const Register = () => {
   const [nome, setNome] = React.useState("");
   const [senha, setSenha] = React.useState("");
   const [confirmarsenha, setConfirmarSenha] = React.useState("");
-
+  const [isLoading, setIsLoading] = React.useState(true);
   const form = {
     email,
     telefone,
@@ -64,6 +64,13 @@ const Register = () => {
         body: JSON.stringify(form),
       });
       const data = await response.json();
+      console.log(data);
+      localStorage.setItem("token", data.token);
+      console.log(response);
+      setResposta(data.msg);
+      if (response.ok) {
+        window.location.href = "/logado";
+      }
     } catch (err) {
       console.log(err);
     }
@@ -132,13 +139,14 @@ const Register = () => {
           <button className="botao" type="submit">
             Registrar-se
           </button>
+
           <ul className="observacao">
             <span>OBS:</span>
             <li>A senha deve conter no mínimo 10 dígitos</li>
             <li>A senha deve conter no mínimo um caractere especial</li>
           </ul>
+          <span className="resposta">{resposta}</span>
         </form>
-        {<div>{resposta}</div>}
       </main>
     </>
   );

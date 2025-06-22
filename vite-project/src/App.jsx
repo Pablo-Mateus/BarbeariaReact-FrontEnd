@@ -12,7 +12,7 @@ import Logado from "./Pages/Logado";
 function App() {
   return (
     <div className={global.pai}>
-      <Header />
+      <Header titulo1="inscreva-se" titulo2="login" />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
