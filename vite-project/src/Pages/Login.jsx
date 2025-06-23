@@ -1,7 +1,7 @@
 import React from "react";
 import global from "../styles/Global.module.css";
 import register from "../styles/Register.module.css";
-
+import { NavLink } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
@@ -11,6 +11,19 @@ const Login = () => {
     senha,
   };
   const [resposta, setResposta] = React.useState("");
+
+  async function forgotPass() {
+    const response = await fetch("http://localhost:5000/resetPassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    });
+
+    const data = await response.json();
+    setResposta(data.message);
+  }
 
   async function handleAuth(event) {
     event.preventDefault();
@@ -72,11 +85,9 @@ const Login = () => {
               }}
             />
           </div>
-          <a href="" className="forgotPass">
-            Esqueci minha senha
-          </a>
+          <NavLink onClick={forgotPass}>Esqueci minha senha</NavLink>
           <button type="submit">Logar</button>
-          <div className="resposta">{resposta}</div>
+          <div className={`${register.resposta}`}>{resposta}</div>
         </form>
       </main>
     </>
