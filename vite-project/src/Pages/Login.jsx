@@ -25,11 +25,18 @@ const Login = () => {
 
       const dados = await response.json();
       setData(dados);
-      console.log(dados);
       setResposta(dados.message);
+
       if (response.ok) {
         localStorage.setItem("token", dados.token);
-        window.location.href = dados.redirect;
+      }
+
+      if (localStorage.getItem("token")) {
+        if (dados.decoded.id === "felipe@gmail.com") {
+          window.location.href = "/logadoBarbeiro";
+        } else {
+          window.location.href = "/logado";
+        }
       }
     } catch (err) {
       console.log(err);
@@ -38,7 +45,6 @@ const Login = () => {
 
   return (
     <>
-      
       <main>
         <h1>Login</h1>
         <form id="formulario" onSubmit={handleAuth}>

@@ -8,6 +8,10 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./Register";
 
 const HomePage = () => {
+  if (localStorage.getItem("token")) {
+    return (window.location.href = "/logado");
+  }
+
   return (
     <>
       <div className={global.pai}>

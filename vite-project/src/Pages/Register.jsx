@@ -64,12 +64,17 @@ const Register = () => {
         body: JSON.stringify(form),
       });
       const data = await response.json();
-      console.log(data);
-      localStorage.setItem("token", data.token);
-      console.log(response);
-      setResposta(data.msg);
+      setResposta[data.msg];
       if (response.ok) {
-        window.location.href = "/logado";
+        localStorage.setItem("token", data.token);
+      }
+
+      if (localStorage.getItem("token")) {
+        if (data.decoded.id === "felipe@gmail.com") {
+          window.location.href = "/logadoBarbeiro";
+        } else {
+          window.location.href = "/logado";
+        }
       }
     } catch (err) {
       console.log(err);

@@ -8,20 +8,24 @@ import Login from "./Pages/Login";
 import global from "./styles/Global.module.css";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
 import Logado from "./Pages/Logado";
-
+import NotFound from "./Pages/NotFound.jsx";
+import MainLayout from "./Components/MainLayout.jsx";
+import LogadoBarbeiro from "./Pages/LogadoBarbeiro.jsx";
 function App() {
   return (
     <div className={global.pai}>
-      <Header titulo1="inscreva-se" titulo2="login" />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
         <Route element={<PrivateRoute />}>
           <Route path="/logado" element={<Logado />} />
+          <Route path="/logadoBarbeiro" element={<LogadoBarbeiro />} />
         </Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
-      <Footer />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import global from "../styles/Global.module.css";
 import logado from "../styles/Logado.module.css";
 import { NavLink } from "react-router-dom";
 
-const Logado = () => {
+const LogadoBarbeiro = () => {
   function clearLocal() {
     localStorage.removeItem("token");
     window.location.reload();
@@ -24,7 +24,7 @@ const Logado = () => {
             <ul>
               <li>
                 <NavLink className={`${header.NavLink}`} to="/Agendamentos">
-                  Agendamentos
+                  Clientes
                 </NavLink>
               </li>
               <li>
@@ -114,4 +114,4 @@ const Logado = () => {
   );
 };
 
-export default Logado;
+export default LogadoBarbeiro;

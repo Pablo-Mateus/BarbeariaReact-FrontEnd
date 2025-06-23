@@ -1,0 +1,94 @@
+.bgServicos {
+  background-color: #f4f7fc;
+}
+
+.servicos h1 {
+  font-family: "Roboto", sans-serif;
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.conteudoServicos {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.conteudoServicos ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.conteudoServicos li {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 280px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.conteudoServicos li:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.conteudoServicos h2 {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.6rem;
+  color: #2a5298;
+  margin-bottom: 10px;
+}
+
+.conteudoServicos p {
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.pagamento h3 {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #3799d4;
+}
+
+.pagamento span {
+  font-size: 1rem;
+  color: #555;
+}
+
+.botaoReserva {
+  background-color: #2977ff; /* Mesma cor do botão "Cancelar agendamento" */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.9em; /* Ajusta o tamanho da fonte nos botões */
+}
+
+.footerBg h1 {
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  margin: 0;
+}
+
+#menuHamburguer div {
+  width: 30px;
+  height: 3px;
+  background-color: #fff;
+  margin: 3px;
+  display: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
