@@ -6,6 +6,7 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
   const [data, setData] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
   const form = {
     email,
     senha,
@@ -13,16 +14,21 @@ const Login = () => {
   const [resposta, setResposta] = React.useState("");
 
   async function forgotPass() {
-    const response = await fetch("http://localhost:5000/resetPassword", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email }),
-    });
+    setResposta("Aguarde..");
+    try {
+      const response = await fetch("http://localhost:5000/resetPassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      });
 
-    const data = await response.json();
-    setResposta(data.message);
+      const data = await response.json();
+      setResposta(data.message);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function handleAuth(event) {

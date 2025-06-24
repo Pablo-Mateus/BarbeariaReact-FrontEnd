@@ -11,6 +11,7 @@ import Logado from "./Pages/Logado";
 import NotFound from "./Pages/NotFound.jsx";
 import MainLayout from "./Components/MainLayout.jsx";
 import LogadoBarbeiro from "./Pages/LogadoBarbeiro.jsx";
+import ForgotPass from "./Pages/ForgotPass.jsx";
 function App() {
   return (
     <div className={global.pai}>
@@ -25,6 +26,7 @@ function App() {
           <Route path="/logadoBarbeiro" element={<LogadoBarbeiro />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
+        <Route path="/forgotpass" element={<ForgotPass/>}></Route>
       </Routes>
     </div>
   );
