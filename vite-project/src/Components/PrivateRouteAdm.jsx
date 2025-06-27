@@ -7,10 +7,9 @@ const getToken = () => {
 };
 
 const PrivateRoute = () => {
-  const navigate = useNavigate();
   const [isAuthenticated, setisAuthenticated] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true); // <-- Começa como TRUE, o que é correto!
-
+  const navigate = useNavigate();
   React.useEffect(() => {
     const checkAuth = async () => {
       const token = getToken();
@@ -34,8 +33,8 @@ const PrivateRoute = () => {
           const data = await response.json();
           // O data.isAuthenticated já é um booleano (true/false)
           setisAuthenticated(data.isAuthenticated);
-          if (data.user === "felipe@gmail.com") {
-            return navigate("/logadoBarbeiro", { replace: true });
+          if (data.user !== "felipe@gmail.com") {
+            return navigate("/logado", { replace: true });
           }
         } else {
           setisAuthenticated(false);

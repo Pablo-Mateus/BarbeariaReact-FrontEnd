@@ -28,11 +28,9 @@ const Logado = () => {
                 </NavLink>
               </li>
               <li>
-                <li>
-                  <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                    Sair
-                  </NavLink>
-                </li>
+                <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
+                  Sair
+                </NavLink>
               </li>
             </ul>
           </div>
