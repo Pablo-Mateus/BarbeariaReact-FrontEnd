@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 const Header = () => {
   if (window.location.href === "http://localhost:5173/logado") {
     return null;
-  }
+  } // Usuário logado tem um header diferente.
   return (
     <header className={`${global.container}`}>
       <div className={`${header.headerMenu}`}>

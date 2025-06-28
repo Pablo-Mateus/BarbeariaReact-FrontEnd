@@ -4,7 +4,6 @@ import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import logado from "../styles/Logado.module.css";
 import { NavLink } from "react-router-dom";
-import validar from "../Components/Validation";
 const LogadoBarbeiro = () => {
   function clearLocal() {
     localStorage.removeItem("token");
@@ -31,7 +30,7 @@ const LogadoBarbeiro = () => {
                 <NavLink className={`${header.NavLink}`} to="/DefinirHorario">
                   Criar horários
                 </NavLink>
-              </li>                                  
+              </li>
               <li>
                 <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
                   Sair

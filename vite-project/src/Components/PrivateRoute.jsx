@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-
+import Footer from "../utilitarios/Footer";
 const getToken = () => {
   const token = localStorage.getItem("token");
   return token;
@@ -58,7 +58,14 @@ const PrivateRoute = () => {
   }
 
   // Se não estiver mais carregando, decide o que renderizar
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  return isAuthenticated ? (
+    <>
+      <Outlet />
+      <Footer />
+    </>
+  ) : (
+    <Navigate to="/login" />
+  );
 };
 
 export default PrivateRoute;
