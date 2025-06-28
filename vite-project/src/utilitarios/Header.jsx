@@ -24,11 +24,9 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <li>
-                <NavLink className={`${header.NavLink}`} to="/login">
-                  Login
-                </NavLink>
-              </li>
+              <NavLink className={`${header.NavLink}`} to="/login">
+                Login
+              </NavLink>
             </li>
           </ul>
         </div>

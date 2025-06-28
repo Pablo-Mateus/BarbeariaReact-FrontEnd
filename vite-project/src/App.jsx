@@ -25,7 +25,6 @@ function App() {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path="/logado" element={<Logado />} />
-          <Footer />
         </Route>
         <Route element={<PrivateRouteAdm />}>
           <Route path="/logadoBarbeiro" element={<LogadoBarbeiro />} />
