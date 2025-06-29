@@ -87,8 +87,11 @@ const Register = () => {
         <h1>REGISTRE-SE</h1>
         <form id="formulario" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name">Nome de usuário</label>
+            <label htmlFor="name" className={`${register.label}`}>
+              Nome de usuário
+            </label>
             <input
+              className={`${register.input}`}
               type="text"
               id="name"
               name="name"
@@ -99,8 +102,11 @@ const Register = () => {
             />
           </div>
           <div>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className={`${register.label}`}>
+              Email
+            </label>
             <input
+              className={`${register.input}`}
               type="email"
               id="email"
               name="email"
@@ -110,8 +116,11 @@ const Register = () => {
             />
           </div>
           <div>
-            <label htmlFor="tel">Telefone</label>
+            <label htmlFor="tel" className={`${register.label}`}>
+              Telefone
+            </label>
             <input
+              className={`${register.input}`}
               type="text"
               id="telefone"
               value={telefone}
@@ -123,7 +132,11 @@ const Register = () => {
             <span id="erro-telefone"></span>
           </div>
           <div>
+            <label htmlFor="password" className={`${register.label}`}>
+              Senha
+            </label>
             <input
+              className={`${register.input}`}
               type="password"
               id="password"
               name="password"
@@ -132,8 +145,11 @@ const Register = () => {
             />
           </div>
           <div>
-            <label htmlFor="confirmpassword">Confirmar senha</label>
+            <label htmlFor="confirmpassword" className={`${register.label}`}>
+              Confirmar senha
+            </label>
             <input
+              className={`${register.input}`}
               type="password"
               id="confirmpassword"
               name="confirmpassword"
@@ -141,7 +157,7 @@ const Register = () => {
               onChange={({ target }) => setConfirmarSenha(target.value)}
             />
           </div>
-          <button className="botao" type="submit">
+          <button className={`${register.button}`} type="submit">
             Registrar-se
           </button>
 

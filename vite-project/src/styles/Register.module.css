@@ -1,20 +1,11 @@
-form {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Garantir que o formulário ocupe 90% da largura */
-  max-width: 400px; /* Limitar o tamanho máximo do formulário */
-  display: flex;
-  flex-direction: column;
-}
 
-form label {
+
+.label {
   font-weight: bold;
   margin-top: 10px;
 }
 
-form input {
+.input {
   padding: 12px;
   border-radius: 6px;
   border: 2px solid #ddd;
@@ -24,7 +15,7 @@ form input {
   box-sizing: border-box; /* Inclui o padding dentro da largura */
 }
 
-form button {
+.button {
   background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: white;
   font-size: 1rem;
@@ -36,7 +27,7 @@ form button {
   transition: all 0.3s;
 }
 
-form button:hover {
+.button:hover {
   background: linear-gradient(135deg, #2a5298, #1e3c72);
 }
 

@@ -68,8 +68,11 @@ const Login = () => {
         <h1>Login</h1>
         <form id="formulario" onSubmit={handleAuth}>
           <div>
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className={`${register.label}`}>
+              Email
+            </label>
             <input
+              className={`${register.input}`}
               type="email"
               id="email"
               name="email"
@@ -80,8 +83,11 @@ const Login = () => {
             />
           </div>
           <div>
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="password" className={`${register.label}`}>
+              Senha
+            </label>
             <input
+              className={`${register.input}`}
               type="password"
               id="password"
               name="password"
@@ -92,7 +98,9 @@ const Login = () => {
             />
           </div>
           <NavLink onClick={forgotPass}>Esqueci minha senha</NavLink>
-          <button type="submit">Logar</button>
+          <button type="submit" className={`${register.button}`}>
+            Logar
+          </button>
           <div className={`${register.resposta}`}>{resposta}</div>
         </form>
       </main>
