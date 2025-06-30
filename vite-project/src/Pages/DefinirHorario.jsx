@@ -12,19 +12,42 @@ import ChoseTime from "../styles/ChoseTime.module.css";
 
 const DefinirHorario = () => {
   const [diaSemana, setDiaSemana] = React.useState("Segunda");
-  const [inicio, setInicio] = React.useState(null);
-  const [fim, setFim] = React.useState(null);
-  const [intervalo, setIntervalo] = React.useState(null);
+  const [inicio, setInicio] = React.useState("");
+  const [fim, setFim] = React.useState("");
+  const [intervalo, setIntervalo] = React.useState("");
+  const [resposta, setResposta] = React.useState("");
 
-  if (inicio && fim && intervalo) {
-    const [horario, setHorario] = React.useState({
-      diaSemana,
-      inicio: `${inicio.$H}:${inicio.$m.toString().padStart(2, "0")}`,
-      fim: `${fim.$H}:${fim.$m.toString().padStart(2, "0")}`,
-      intervalo: `${intervalo.$H}:${intervalo.$m.toString().padStart(2, "0")}`,
-    });
+  function handleSubmit(event) {
+    event.preventDefault();
 
-    console.log(horario);
+    try {
+      if (inicio && fim && intervalo) {
+        console.log(inicio);
+        const horario = {
+          diaSemana,
+          inicio: `${inicio.$H}:${inicio.$m.toString().padStart(2, "0")}`,
+          fim: `${fim.$H}:${fim.$m.toString().padStart(2, "0")}`,
+          intervalo: `${intervalo.$m}`,
+        };
+
+        const request = async () => {
+          const response = await fetch("http://localhost:5000/DefinirHorario", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(horario),
+          });
+          const data = await response.json();
+          setResposta(data.message);
+        };
+        request();
+      } else {
+        setResposta("Você precisa preencher todos os campos");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function clearLocal() {
@@ -32,9 +55,6 @@ const DefinirHorario = () => {
     window.location.reload();
   }
 
-  if (diaSemana) {
-    console.log(diaSemana.diasemana);
-  }
   return (
     <>
       <header className={`${global.container}`}>
@@ -109,7 +129,9 @@ const DefinirHorario = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimePicker"]}>
                 <TimePicker
+                  views={["minutes"]}
                   label="Intervalo"
+                  timeSteps={{ minutes: 1 }}
                   onChange={(target) => {
                     setIntervalo(target);
                   }}
@@ -117,7 +139,12 @@ const DefinirHorario = () => {
               </DemoContainer>
             </LocalizationProvider>
           </div>
-          <button type="submit" className={`${ChoseTime.button}`}>
+          <span className={`${ChoseTime.resposta}`}>{resposta}</span>
+          <button
+            type="submit"
+            className={`${ChoseTime.button}`}
+            onClick={handleSubmit}
+          >
             Enviar
           </button>
         </form>
