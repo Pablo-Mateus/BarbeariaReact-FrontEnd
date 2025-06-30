@@ -16,13 +16,67 @@ const DefinirHorario = () => {
   const [fim, setFim] = React.useState("");
   const [intervalo, setIntervalo] = React.useState("");
   const [resposta, setResposta] = React.useState("");
+  const [horarios, setHorarios] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [convertidos, setConvertidos] = React.useState({
+    inicio,
+    fim,
+    intervalo,
+  });
+
+  React.useEffect(() => {
+    try {
+      const request = async () => {
+        setTimeout(() => {
+          setResposta("");
+        }, 3000);
+        const response = await fetch("http://localhost:5000/getTimes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ dia: diaSemana }),
+        });
+        const data = await response.json();
+        setHorarios(data.horarios);
+        console.log(response);
+        if (response.ok === false) {
+          setResposta(data.message);
+        }
+        if (response.ok) {
+          setIsLoading(false);
+        }
+      };
+
+      request();
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+
+    if (isLoading) {
+    return;
+  } else if (horarios) {
+    setConvertidos({
+      ...convertidos,
+      inicio: `${dayjs().format("YYYY-MM-DD ")}${horarios[0]}`,
+      fim: `${dayjs().format("YYYY-MM-DD ")}${horarios[horarios.length - 1]}`,
+    });
+    console.log(convertidos)
+  }
+  }, [diaSemana]);
+
+  
 
   function handleSubmit(event) {
     event.preventDefault();
 
+    setTimeout(() => {
+      setResposta("");
+    }, 3000);
+
     try {
       if (inicio && fim && intervalo) {
-        console.log(inicio);
         const horario = {
           diaSemana,
           inicio: `${inicio.$H}:${inicio.$m.toString().padStart(2, "0")}`,
@@ -105,6 +159,7 @@ const DefinirHorario = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimePicker"]}>
                 <TimePicker
+                  defaultValue={dayjs(convertidos[inicio])}
                   label="Inicio"
                   onChange={(target) => {
                     setInicio(target);
@@ -117,6 +172,7 @@ const DefinirHorario = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimePicker"]}>
                 <TimePicker
+                  defaultValue={dayjs(convertidos[fim])}
                   label="Fim"
                   onChange={(target) => {
                     setFim(target);
