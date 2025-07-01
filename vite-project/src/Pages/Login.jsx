@@ -1,7 +1,8 @@
 import React from "react";
 import global from "../styles/Global.module.css";
 import register from "../styles/Register.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
@@ -12,7 +13,7 @@ const Login = () => {
     senha,
   };
   const [resposta, setResposta] = React.useState("");
-
+  const navigate = useNavigate();
   async function forgotPass() {
     setResposta("Aguarde..");
     try {
@@ -48,14 +49,7 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem("token", dados.token);
-      }
-
-      if (localStorage.getItem("token")) {
-        if (dados.decoded.id === "felipe@gmail.com") {
-          window.location.href = "/logadoBarbeiro";
-        } else {
-          window.location.href = "/logado";
-        }
+        navigate(dados.redirect, { replace: true });
       }
     } catch (err) {
       console.log(err);

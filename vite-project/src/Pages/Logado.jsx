@@ -3,13 +3,15 @@ import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
 import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import logado from "../styles/Logado.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Logado = () => {
   function clearLocal() {
     localStorage.removeItem("token");
     window.location.reload();
   }
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -49,7 +51,10 @@ const Logado = () => {
                 <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
                 <div className={`${logado.pagamento}`}>
                   <h3 className={`${logado.reservar}`}>
-                    <button className={`${logado.botaoReserva}`}>
+                    <button
+                      className={`${logado.botaoReserva}`}
+                      onClick={() => navigate("/agendar", { replace: true })}
+                    >
                       Reservar
                     </button>
                   </h3>
@@ -64,7 +69,10 @@ const Logado = () => {
                 <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
                 <div className={`${logado.pagamento}`}>
                   <h3 className={`${logado.reservar}`}>
-                    <button className={`${logado.botaoReserva}`}>
+                    <button
+                      className={`${logado.botaoReserva}`}
+                      onClick={() => navigate("/agendar", { replace: true })}
+                    >
                       Reservar
                     </button>
                   </h3>
@@ -79,7 +87,10 @@ const Logado = () => {
                 <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
                 <div className={`${logado.pagamento}`}>
                   <h3 className={`${logado.reservar}`}>
-                    <button className={`${logado.botaoReserva}`}>
+                    <button
+                      className={`${logado.botaoReserva}`}
+                      onClick={() => navigate("/agendar", { replace: true })}
+                    >
                       Reservar
                     </button>
                   </h3>
@@ -94,7 +105,10 @@ const Logado = () => {
                 <p>Corte de cabelo completo com tesoura, máquina e navalha.</p>
                 <div className={`${logado.pagamento}`}>
                   <h3 className={`${logado.reservar}`}>
-                    <button className={`${logado.botaoReserva}`}>
+                    <button
+                      className={`${logado.botaoReserva}`}
+                      onClick={() => navigate("/agendar", { replace: true })}
+                    >
                       Reservar
                     </button>
                   </h3>
