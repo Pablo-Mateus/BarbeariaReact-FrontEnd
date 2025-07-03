@@ -1,0 +1,15 @@
+.horas {
+  display: flex;
+  width: 300px;
+  flex-direction: row;
+  overflow-x: auto;
+  margin: 0 auto;
+}
+
+.horaBotao {
+  background-color: #f8f8f8;
+  border: none;
+  margin: 5px;
+  padding: 4px;
+  font-size: 1rem;
+}
