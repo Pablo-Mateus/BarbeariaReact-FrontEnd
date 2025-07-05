@@ -1,15 +1,16 @@
 .horas {
   display: flex;
-  width: 300px;
-  flex-direction: row;
+  width: 500px;
   overflow-x: auto;
-  margin: 0 auto;
+margin: 0 auto;
 }
 
 .horaBotao {
-  background-color: #f8f8f8;
   border: none;
   margin: 5px;
-  padding: 4px;
+  padding: 5px 15px;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 3px;
   font-size: 1rem;
 }

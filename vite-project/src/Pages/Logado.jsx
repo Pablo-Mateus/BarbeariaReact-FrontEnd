@@ -53,7 +53,11 @@ const Logado = () => {
                   <h3 className={`${logado.reservar}`}>
                     <button
                       className={`${logado.botaoReserva}`}
-                      onClick={() => navigate("/agendar", { replace: true })}
+                      onClick={() =>
+                        navigate("/agendar?servico=corte&tempo=40", {
+                          replace: true,
+                        })
+                      }
                     >
                       Reservar
                     </button>
@@ -71,7 +75,11 @@ const Logado = () => {
                   <h3 className={`${logado.reservar}`}>
                     <button
                       className={`${logado.botaoReserva}`}
-                      onClick={() => navigate("/agendar", { replace: true })}
+                      onClick={() =>
+                        navigate("/agendar?servico=corte e barba&tempo=40", {
+                          replace: true,
+                        })
+                      }
                     >
                       Reservar
                     </button>
@@ -89,7 +97,12 @@ const Logado = () => {
                   <h3 className={`${logado.reservar}`}>
                     <button
                       className={`${logado.botaoReserva}`}
-                      onClick={() => navigate("/agendar", { replace: true })}
+                      onClick={() =>
+                        navigate(
+                          "/agendar?servico=barba + sobrancela&tempo=40",
+                          { replace: true }
+                        )
+                      }
                     >
                       Reservar
                     </button>
@@ -107,7 +120,11 @@ const Logado = () => {
                   <h3 className={`${logado.reservar}`}>
                     <button
                       className={`${logado.botaoReserva}`}
-                      onClick={() => navigate("/agendar", { replace: true })}
+                      onClick={() =>
+                        navigate("/agendar?servico=pezinho&tempo=25", {
+                          replace: true,
+                        })
+                      }
                     >
                       Reservar
                     </button>

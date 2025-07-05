@@ -2,7 +2,7 @@ import React from "react";
 import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,6 +12,7 @@ import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import agendar from "../styles/Agendar.module.css";
 import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/material";
 
 const PRIMARY_BLUE = "#212F3D"; // Azul escuro da sua barra
@@ -27,12 +28,18 @@ const StyledCalendarContainer = styled("div")(({ theme }) => ({
   maxWidth: 800, // Ajuste a largura conforme necessário
   width: "100%",
   margin: "20px auto", // Centraliza na página
-  border: `1px solid ${LIGHT_GREY_BG}`, // Borda sutil
+  border: `1px solid ${LIGHT_GREY_BG}`, // Borda sutil,
 }));
 const Agendar = () => {
+  const params = new URLSearchParams(window.location.search);
+  const dados = {
+    servico: params.get("servico"),
+    tempo: params.get("tempo"),
+  };
+
   const [value, setValue] = React.useState(dayjs());
   const [arrayHoras, setArrayHoras] = React.useState([]);
-
+  const [selectedButton, setSelectedButton] = React.useState(null);
   function clearLocal() {
     localStorage.removeItem("token");
     window.location.reload();
@@ -63,7 +70,7 @@ const Agendar = () => {
         });
 
         const data = await response.json();
-        console.log(data);
+
         setArrayHoras(data.horarios);
       } catch (err) {
         console.log(err);
@@ -71,6 +78,10 @@ const Agendar = () => {
     };
     getTimes();
   }, [value]);
+
+  function handleClick(item) {
+    setSelectedButton(item);
+  }
 
   return (
     <>
@@ -99,118 +110,61 @@ const Agendar = () => {
       </header>
 
       <main>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <h1>Selecione o dia para seu agendamento.</h1>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          localeText={{
+            okButtonLabel: "Confirmar", // Garante o texto do botão OK
+            cancelButtonLabel: "Cancelar", // Garante o texto do botão Cancelar
+          }}
+        >
           <StyledCalendarContainer>
-            <StaticDatePicker
-              orientation={isMobile ? "portrait" : "landscape"}
+            <DatePicker
               value={value}
               onChange={(target) => {
                 setValue(target);
               }}
-              openTo="day"
+              orientation={isMobile ? "portrait" : "landscape"}
               sx={{
                 backgroundColor: "white",
-                overflow: "auto",
+                borderRadius: "16px", // Bordas do container do dialog
+                width: "100%", // Para ele ocupar o espaço do pai
 
-                ".MuiPickerStaticWrapper-content": {
+                ".MuiPickersLayout-contentWrapper": {
+                  minWidth: isMobile ? "100%" : "280px",
                   padding: "16px",
                 },
-              }}
-              slotProps={{
-                toolbar: {
-                  hidden: false,
-                  sx: {
-                    backgroundColor: PRIMARY_BLUE,
-                    color: TEXT_LIGHT,
-                    padding: "16px",
-                    ".MuiTypography-root": {
-                      fontWeight: "bold",
-                      fontSize: "1.5rem",
-                    },
-                    ".MuiPickersToolbar-content": {
-                      justifyContent: "center",
-                    },
-                  },
-                },
 
-                calendarHeader: {
-                  sx: {
-                    backgroundColor: LIGHT_GREY_BG,
-                    borderRadius: "8px",
-                    padding: "8px 12px",
-                    marginBottom: "10px",
-
-                    ".MuiPickersCalendarHeader-label": {
-                      color: TEXT_DARK,
-                      fontWeight: "bold",
-                      fontSize: "1.1rem",
-                    },
-
-                    ".MuiIconButton-root": {
-                      color: PRIMARY_BLUE,
-                      "&:hover": {
-                        backgroundColor: "rgba(33, 47, 61, 0.1)",
-                      },
-                    },
-                  },
-                },
-
-                day: {
-                  sx: {
-                    borderRadius: "50%",
-                    fontWeight: "normal",
-                    color: TEXT_DARK,
-                    "&.MuiPickersDay-today": {
-                      border: `2px solid ${PRIMARY_BLUE}`,
-                      backgroundColor: "transparent",
-                      color: PRIMARY_BLUE,
-                      fontWeight: "bold",
-                    },
-
-                    "&.Mui-selected": {
-                      backgroundColor: PRIMARY_BLUE,
-                      color: TEXT_LIGHT,
-                      fontWeight: "bold",
-                      "&:hover": {
-                        backgroundColor: PRIMARY_BLUE,
-                        opacity: 0.9,
-                      },
-                    },
-
-                    "&:hover": {
-                      backgroundColor: ACCENT_GOLD,
-                      color: TEXT_DARK,
-                      opacity: 0.8,
-                    },
-
-                    "&.MuiPickersDay-day": {
-                      // Seletor genérico para dias no calendário
-                      "&:nth-of-type(7n)": {
-                        // Domingo
-                        color: "red", // Exemplo: dias de domingo em vermelho
-                      },
-                      "&:nth-of-type(7n-1)": {
-                        // Sábado
-                        color: "blue", // Exemplo: dias de sábado em azul
-                      },
-                    },
-                  },
+                ".MuiPickersLayout-root": {
+                  flexDirection: isMobile ? "column" : "row",
+                  alignItems: "stretch",
                 },
               }}
             />
-            <div className={`${agendar.horas}`}>
-              {arrayHoras
-                ? arrayHoras.map((item) => {
-                    return (
-                      <div>
-                        <button className={`${agendar.horaBotao}`}>
-                          {item}
-                        </button>
-                      </div>
-                    );
-                  })
-                : "Nenhum horário disponível para o dia"}
-            </div>
+            {
+              <div className={`${agendar.horas}`}>
+                {arrayHoras
+                  ? arrayHoras.map((item) => {
+                      return (
+                        <div>
+                          <button
+                            key={item}
+                            style={
+                              selectedButton === item
+                                ? { background: "blue" }
+                                : { background: "#1976d2" }
+                            }
+                            className={`${agendar.horaBotao}`}
+                            onClick={() => handleClick(item)}
+                          >
+                            {item}
+                          </button>
+                        </div>
+                      );
+                    })
+                  : "Nenhum horário disponível para o dia"}
+              </div>
+            }
           </StyledCalendarContainer>
         </LocalizationProvider>
       </main>
