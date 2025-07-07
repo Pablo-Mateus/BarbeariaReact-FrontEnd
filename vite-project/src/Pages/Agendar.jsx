@@ -40,17 +40,11 @@ const Agendar = () => {
   const [user, setUser] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [resposta, setResposta] = React.useState("Enviar");
-
+  const [intervalo, setIntervalo] = React.useState(null);
   function clearLocal() {
     localStorage.removeItem("token");
     window.location.reload();
   }
-  const dados = {
-    tempo,
-    value,
-    servico: params.get("servico"),
-    hora: params.get("tempo"),
-  };
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -64,6 +58,14 @@ const Agendar = () => {
     Mon: "Segunda",
   };
 
+  const dados = {
+    tempo,
+    value,
+    servico: params.get("servico"),
+    hora: params.get("tempo"),
+    intervalo,
+    diaSemana: diasSemana[value.format("ddd")],
+  };
   React.useEffect(() => {
     const dia = value.format("ddd");
 
@@ -78,7 +80,17 @@ const Agendar = () => {
         });
 
         const data = await response.json();
-        setArrayHoras(data.horarios);
+
+        const newHoras = data.disponiveis || [];
+        console.log(newHoras);
+        const intervalo = data.intervalo || null;
+        setArrayHoras(newHoras);
+        setIntervalo(intervalo);
+        if (newHoras.length > 0) {
+          setTempo(newHoras[0]);
+        } else {
+          setTempo(null);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -111,7 +123,7 @@ const Agendar = () => {
           <div className={`${header.menuBarber}`}>
             <ul>
               <li>
-                <NavLink className={`${header.NavLink}`} to="/meusagendamentos">
+                <NavLink className={`${header.NavLink}`} to="/agendamentos">
                   Meus agendamentos
                 </NavLink>
               </li>

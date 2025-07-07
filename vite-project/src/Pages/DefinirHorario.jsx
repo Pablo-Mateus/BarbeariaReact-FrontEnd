@@ -12,15 +12,12 @@ import ChoseTime from "../styles/ChoseTime.module.css";
 
 const DefinirHorario = () => {
   const [diaSemana, setDiaSemana] = React.useState("Segunda");
-  const [inicio, setInicio] = React.useState("");
-  const [fim, setFim] = React.useState("");
-  const [intervalo, setIntervalo] = React.useState("");
+  const [inicio, setInicio] = React.useState(dayjs());
+  const [fim, setFim] = React.useState(dayjs());
+  const [intervalo, setIntervalo] = React.useState(dayjs());
   const [resposta, setResposta] = React.useState("");
-  const [horarios, setHorarios] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [convertidoInicio, setConvertidoInicio] = React.useState(null);
-  const [convertidoFim, setConvertidoFim] = React.useState(null);
-  const [convertidoIntervalo, setConvertidoIntervalo] = React.useState(null);
+  const [horarios, setHorarios] = React.useState([]);
+  const [disponiveis, setDisponiveis] = React.useState("");
 
   React.useEffect(() => {
     try {
@@ -36,34 +33,35 @@ const DefinirHorario = () => {
           body: JSON.stringify({ dia: diaSemana }),
         });
         const data = await response.json();
-        setHorarios(data.horarios);
-        setConvertidoIntervalo(data.intervalo);
+        const horarios = data.horarios || [];
+        const interval = data.intervalo || null;
+
+        setHorarios(horarios);
+        setDisponiveis(data.disponiveis);
+
+        if (horarios.length > 0 && interval) {
+          setInicio(dayjs(`${dayjs().format("YYYY-MM-DD")}${horarios[0]}`));
+          setFim(
+            dayjs(
+              `${dayjs().format("YYYY-MM-DD")}${horarios[horarios.length - 1]}`
+            )
+          );
+          setIntervalo(dayjs(`${dayjs().format("YYYY-MM-DD")}00:${interval}`));
+        } else {
+          setInicio(null);
+          setFim(null);
+          setIntervalo(null);
+        }
 
         if (response.ok === false) {
           setResposta(data.message);
-          setConvertidoInicio(null);
-          setConvertidoFim(null);
-          setConvertidoIntervalo(null);
         }
       };
       request();
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
     }
   }, [diaSemana]);
-
-  React.useEffect(() => {
-    if (horarios) {
-      setConvertidoInicio(`${dayjs().format("YYYY-MM-DD ")}${horarios[0]}`);
-      setConvertidoFim(
-        `${dayjs().format("YYYY-MM-DD ")}${horarios[horarios.length - 1]}`
-      );
-      setConvertidoIntervalo(
-        `${dayjs().format("YYYY-MM-DD ")}00:${convertidoIntervalo}`
-      );
-    }
-  }, [horarios]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -156,11 +154,10 @@ const DefinirHorario = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimePicker"]}>
                 <TimePicker
-                  value={dayjs(convertidoInicio)}
+                  value={inicio}
                   label="Inicio"
                   onChange={(target) => {
                     setInicio(target);
-                    setConvertidoInicio(target.$d);
                   }}
                 />
               </DemoContainer>
@@ -170,11 +167,10 @@ const DefinirHorario = () => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["TimePicker"]}>
                 <TimePicker
-                  value={dayjs(convertidoFim)}
+                  value={fim}
                   label="Fim"
                   onChange={(target) => {
                     setFim(target);
-                    setConvertidoFim(target.$d);
                   }}
                 />
               </DemoContainer>
@@ -185,18 +181,33 @@ const DefinirHorario = () => {
               <DemoContainer components={["TimePicker"]}>
                 <TimePicker
                   views={["minutes"]}
-                  value={dayjs(convertidoIntervalo)}
+                  value={intervalo}
                   label="Intervalo"
                   timeSteps={{ minutes: 1 }}
                   onChange={(target) => {
                     setIntervalo(target);
-                    setConvertidoIntervalo(target.$d);
                   }}
                 />
               </DemoContainer>
             </LocalizationProvider>
           </div>
           <span className={`${ChoseTime.resposta}`}>{resposta}</span>
+          <span>
+            Disponíveis:
+            {disponiveis ? (
+              <>
+                <select name="" id="" className={`${ChoseTime.inputHoras}`}>
+                  {disponiveis.map((hora) => {
+                    return (
+                      <option value={hora} key={hora}>
+                        {hora}
+                      </option>
+                    );
+                  })}
+                </select>
+              </>
+            ) : null}
+          </span>
           <button
             type="submit"
             className={`${ChoseTime.button}`}

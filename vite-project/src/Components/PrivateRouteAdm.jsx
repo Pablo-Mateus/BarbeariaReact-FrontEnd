@@ -31,7 +31,7 @@ const PrivateRoute = () => {
 
         if (response.ok) {
           const data = await response.json();
-          // O data.isAuthenticated já é um booleano (true/false)
+
           setisAuthenticated(data.isAuthenticated);
           if (data.user !== "felipe@gmail.com") {
             return navigate("/logado", { replace: true });

@@ -1,0 +1,16 @@
+.botaoCancelar {
+  display: inline-block;
+  padding: 12px 25px;
+  background-color: #ff4f4f;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.botaoCancelar:hover {
+  background-color: #e63946;
+}
