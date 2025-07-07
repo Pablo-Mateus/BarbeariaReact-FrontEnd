@@ -1,8 +1,9 @@
 import React from "react";
 import global from "../styles/Global.module.css";
 import register from "../styles/Register.module.css";
-
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [telefone, setTelefone] = React.useState("");
   const [nome, setNome] = React.useState("");
@@ -36,6 +37,12 @@ const Register = () => {
       digitos = digitos.slice(0, 11);
     }
 
+    if (digitos.length < 11) {
+      return setResposta("Número de telefone inválido");
+    } else {
+      setResposta("");
+    }
+
     if (digitos.length > 10) {
       return digitos.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
     } else if (digitos.length > 5) {
@@ -64,17 +71,10 @@ const Register = () => {
         body: JSON.stringify(form),
       });
       const data = await response.json();
-      setResposta[data.msg];
+      setResposta(data.msg);
       if (response.ok) {
         localStorage.setItem("token", data.token);
-      }
-
-      if (localStorage.getItem("token")) {
-        if (data.decoded.id === "felipe@gmail.com") {
-          window.location.href = "/logadoBarbeiro";
-        } else {
-          window.location.href = "/logado";
-        }
+        navigate(data.redirect, { replace: true });
       }
     } catch (err) {
       console.log(err);
@@ -138,8 +138,8 @@ const Register = () => {
             <input
               className={`${register.input}`}
               type="password"
-              id="password"
-              name="password"
+              id="senha"
+              name="senha"
               placeholder="Senha"
               onChange={({ target }) => setSenha(target.value)}
             />

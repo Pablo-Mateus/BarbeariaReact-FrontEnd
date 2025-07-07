@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
@@ -14,6 +14,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box } from "@mui/material";
+import { useCalendarState } from "@mui/x-date-pickers/internals";
 
 const PRIMARY_BLUE = "#212F3D"; // Azul escuro da sua barra
 const ACCENT_GOLD = "#FFD700"; // Um dourado/mostarda para destaque (sugestão)
@@ -32,33 +33,40 @@ const StyledCalendarContainer = styled("div")(({ theme }) => ({
 }));
 const Agendar = () => {
   const params = new URLSearchParams(window.location.search);
-  const dados = {
-    servico: params.get("servico"),
-    tempo: params.get("tempo"),
-  };
-
+  const token = localStorage.getItem("token");
   const [value, setValue] = React.useState(dayjs());
   const [arrayHoras, setArrayHoras] = React.useState([]);
-  const [selectedButton, setSelectedButton] = React.useState(null);
+  const [tempo, setTempo] = React.useState(null);
+  const [user, setUser] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [resposta, setResposta] = React.useState("Enviar");
+
   function clearLocal() {
     localStorage.removeItem("token");
     window.location.reload();
   }
+  const dados = {
+    tempo,
+    value,
+    servico: params.get("servico"),
+    hora: params.get("tempo"),
+  };
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const diasSemana = {
-    Mon: "Segunda",
+    Sun: "Domingo",
     Tue: "Terca",
     Wed: "Quarta",
     Thu: "Quinta",
     Fri: "Sexta",
-    Sat: "sabado",
-    Sun: "domingo",
+    Sat: "Sabado",
+    Mon: "Segunda",
   };
 
   React.useEffect(() => {
-    const dia = value.toString().split(",")[0];
+    const dia = value.format("ddd");
+
     const getTimes = async () => {
       try {
         const response = await fetch("http://localhost:5000/getTimes", {
@@ -70,7 +78,6 @@ const Agendar = () => {
         });
 
         const data = await response.json();
-
         setArrayHoras(data.horarios);
       } catch (err) {
         console.log(err);
@@ -79,8 +86,17 @@ const Agendar = () => {
     getTimes();
   }, [value]);
 
-  function handleClick(item) {
-    setSelectedButton(item);
+  async function handleSubmit() {
+    const response = await fetch("http://localhost:5000/createSchedule", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(dados),
+    });
+    const data = await response.json();
+    setResposta(data.message);
   }
 
   return (
@@ -143,30 +159,41 @@ const Agendar = () => {
             />
             {
               <div className={`${agendar.horas}`}>
-                {arrayHoras
-                  ? arrayHoras.map((item) => {
-                      return (
-                        <div>
-                          <button
+                {arrayHoras ? (
+                  <>
+                    <span className={`${agendar.chooseTime}`}>
+                      Selecione o horário:
+                    </span>
+                    <select
+                      value={tempo}
+                      className={`${agendar.selectHoras}`}
+                      onChange={({ target }) => {
+                        setTempo(target.value);
+                      }}
+                    >
+                      {arrayHoras.map((item) => {
+                        return (
+                          <option
                             key={item}
-                            style={
-                              selectedButton === item
-                                ? { background: "blue" }
-                                : { background: "#1976d2" }
-                            }
+                            value={item}
                             className={`${agendar.horaBotao}`}
-                            onClick={() => handleClick(item)}
                           >
                             {item}
-                          </button>
-                        </div>
-                      );
-                    })
-                  : "Nenhum horário disponível para o dia"}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </>
+                ) : (
+                  <span>Nenhum horário disponível para o dia</span>
+                )}
               </div>
             }
           </StyledCalendarContainer>
         </LocalizationProvider>
+        <button className={`${agendar.submitData}`} onClick={handleSubmit}>
+          {resposta}
+        </button>
       </main>
     </>
   );
