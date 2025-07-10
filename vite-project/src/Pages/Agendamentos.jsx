@@ -49,6 +49,8 @@ const Agendamentos = () => {
       body: JSON.stringify({ agendamento }),
     });
     const data = await request.json();
+    console.log(data.message);
+    
   }
 
   return (
