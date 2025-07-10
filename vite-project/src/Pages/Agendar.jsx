@@ -81,7 +81,7 @@ const Agendar = () => {
 
         const data = await response.json();
 
-        const newHoras = data.disponiveis || [];
+        const newHoras = data.disponiveis || null;
         console.log(newHoras);
         const intervalo = data.intervalo || null;
         setArrayHoras(newHoras);

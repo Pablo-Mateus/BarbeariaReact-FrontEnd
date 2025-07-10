@@ -15,14 +15,14 @@ const LogadoBarbeiro = () => {
       <header className={`${global.container}`}>
         <div className={`${header.headerMenu}`}>
           <div className={global.imagemLogo}>
-            <NavLink to="/" end>
+            <NavLink to="/logadoBarbeiro" end>
               <img src={logo} alt="Logo Barbearia" />
             </NavLink>
           </div>
           <div className={`${header.menuBarber}`}>
             <ul>
               <li>
-                <NavLink className={`${header.NavLink}`} to="/Agendamentos">
+                <NavLink className={`${header.NavLink}`} to="/Agendados">
                   Clientes
                 </NavLink>
               </li>
