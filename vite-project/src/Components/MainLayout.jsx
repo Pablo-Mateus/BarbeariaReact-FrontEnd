@@ -35,9 +35,9 @@ const MainLayout = () => {
   return (
     <>
       <div className={`${global.pai}`}>
-        <Header />
+
         <Outlet />
-        <Footer />
+      
       </div>
     </>
   );

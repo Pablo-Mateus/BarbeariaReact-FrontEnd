@@ -1,92 +1,112 @@
-import React from "react";
-import Header from "../utilitarios/Header";
-import Footer from "../utilitarios/Footer";
+import React, { useEffect } from "react";
+import Header from "../utilitarios/Header"; // Verifique o caminho real do seu Header
+import Footer from "../utilitarios/Footer"; // Verifique o caminho real do seu Footer
 import styles from "../styles/App.module.css";
 import global from "../styles/Global.module.css";
 import { Helmet } from "react-helmet";
-import { Routes, Route } from "react-router-dom";
-import Register from "./Register";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
+
+// Dados dos serviços (modelo para que você possa adicionar/editar facilmente)
+const SERVICES_DATA = [
+  {
+    id: "corte",
+    title: "Corte de Cabelo",
+    description: "Corte de cabelo completo com tesoura, máquina e navalha, finalizado com produtos de qualidade.",
+    price: 35.00,
+    time: 45, // Duração em minutos
+  },
+  {
+    id: "corte-barba",
+    title: "Corte + Barba",
+    description: "Corte de cabelo e design de barba, com toalha quente e finalização premium.",
+    price: 60.00,
+    time: 75, // Duração em minutos
+  },
+  {
+    id: "barba-sobrancelha",
+    title: "Barba + Sobrancelha",
+    description: "Modelagem e hidratação da barba, alinhamento e limpeza das sobrancelhas.",
+    price: 40.00,
+    time: 40, // Duração em minutos
+  },
+  {
+    id: "pezinho",
+    title: "Ajuste de Pezinho",
+    description: "Manutenção do corte com acabamento na nuca e costeletas.",
+    price: 20.00,
+    time: 20, // Duração em minutos
+  },
+  // Adicione mais serviços aqui se tiver
+  {
+    id: "completo",
+    title: "Experiência Completa",
+    description: "Corte de cabelo, design de barba, sobrancelha e lavagem relaxante.",
+    price: 85.00,
+    time: 90, // Duração em minutos
+  },
+];
 
 const HomePage = () => {
-  if (localStorage.getItem("token")) {
-    return (window.location.href = "/logado");
-  }
+  const navigate = useNavigate(); // Inicializar useNavigate
+
+  // Redirecionamento condicional usando useEffect para o React Router
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/logado", { replace: true }); // Redireciona e substitui a entrada no histórico
+    }
+  }, [navigate]); // navigate é uma dependência estável do useCallback
+
+  const handleAgendarClick = (serviceTitle, serviceTime) => {
+    // Redireciona para a página de agendamento com os parâmetros do serviço
+    navigate(`/agendar?servico=${encodeURIComponent(serviceTitle)}&tempo=${serviceTime}`);
+  };
 
   return (
     <>
+      <Helmet>
+        <title>Home | Barbearia Premium</title>
+        <meta name="description" content="Conheça os serviços de corte de cabelo, barba e sobrancelha da Barbearia Premium. Agende seu horário online!" />
+      </Helmet>
+
+      {/* Header importado */}
+      <Header />
+
       <div className={global.pai}>
-        <Helmet>
-          <title>Home Barbearia</title>
-          <meta name="Página inicial barbearia" />
-        </Helmet>
-        <main className={`${styles.bgServicos}`}>
-          <section className={`${global.container} ${styles.servicos}`}>
-            <div>
-              <h1>Conheça os nossos serviços</h1>
+        <main className={`${styles.heroSection} ${styles.bgServicos}`}>
+          <section className={`${global.container} ${styles.servicosContent}`}>
+            <div className={styles.introText}>
+              <h1>Seu Estilo, Nossa Arte.</h1>
+              <p>Descubra uma experiência única de cuidado masculino com nossos serviços especializados.</p>
             </div>
-            <div className={`${styles.conteudoServicos}`}>
-              <ul>
-                <li>
-                  <h2>Corte</h2>
-                  <p>
-                    Corte de cabelo completo com tesoura, máquina e navalha.
-                  </p>
-                  <div className="pagamento">
-                    <h3 className="avulso">
-                      Avulso <span>R$35</span>
+            
+            <div className={styles.servicesGrid}>
+              {SERVICES_DATA.map((service) => (
+                <div key={service.id} className={styles.serviceCard}>
+                  <h2>{service.title}</h2>
+                  <p>{service.description}</p>
+                  <div className={styles.priceDuration}>
+                    <h3>
+                      Preço: <span>R${service.price.toFixed(2).replace('.', ',')}</span>
                     </h3>
-                    <h3 className="avulso">
-                      Mensal <span>R$35</span>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <h2>Corte + barba</h2>
-                  <p>
-                    Corte de cabelo completo com tesoura, máquina e navalha.
-                  </p>
-                  <div className="pagamento">
-                    <h3 className="avulso">
-                      Avulso <span>R$35</span>
-                    </h3>
-                    <h3 className="avulso">
-                      Mensal <span>R$35</span>
+                    <h3>
+                      Duração: <span>{service.time} min</span>
                     </h3>
                   </div>
-                </li>
-                <li>
-                  <h2>barba + sobrancelha</h2>
-                  <p>
-                    Corte de cabelo completo com tesoura, máquina e navalha.
-                  </p>
-                  <div className="pagamento">
-                    <h3 className="avulso">
-                      Avulso <span>R$35</span>
-                    </h3>
-                    <h3 className="avulso">
-                      Mensal <span>R$35</span>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <h2>Pezinho</h2>
-                  <p>
-                    Corte de cabelo completo com tesoura, máquina e navalha.
-                  </p>
-                  <div className="pagamento">
-                    <h3 className="avulso">
-                      Avulso <span>R$35</span>
-                    </h3>
-                    <h3 className="avulso">
-                      Mensal <span>R$35</span>
-                    </h3>
-                  </div>
-                </li>
-              </ul>
+                  <button
+                    className={styles.agendarButton}
+                    onClick={() => handleAgendarClick(service.title, service.time)}
+                  >
+                    Agendar
+                  </button>
+                </div>
+              ))}
             </div>
           </section>
         </main>
       </div>
+
+      {/* Footer importado */}
+      <Footer />
     </>
   );
 };

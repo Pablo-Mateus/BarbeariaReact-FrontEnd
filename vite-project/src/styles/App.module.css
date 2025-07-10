@@ -1,56 +1,232 @@
+/* App.module.css */
 
-
-.bgServicos {
-  background-color: #f4f7fc;
+/* Cores e Fontes - Defina variáveis para consistência */
+:root {
+  --primary-blue-dark: #1e3c72;
+  --primary-blue-light: #2a5298;
+  --accent-gold: #ffc107; /* Um dourado vibrante */
+  --text-dark: #333;
+  --text-light: #f9f9f9;
+  --bg-light: #f4f7fc;
+  --card-bg: #ffffff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
 }
 
-.servicos h1 {
-  font-family: "Roboto", sans-serif;
-  font-size: 2rem;
-  color: #333;
+/* Hero Section / Banner Inicial */
+.heroSection {
+  background-image: url('../assets/barber-shop-bg.jpg'); /* Adicione uma imagem de fundo atraente */
+  background-size: cover;
+  background-position: center;
+  color: var(--text-light);
   text-align: center;
-  margin-bottom: 20px;
-}
-
-.conteudoServicos {
+  padding: 80px 20px; /* Mais padding para destaque */
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 30px;
-  flex-wrap: wrap;
+  align-items: center;
+  min-height: 400px; /* Altura mínima para o banner */
+  position: relative;
 }
 
-.conteudoServicos ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+/* Overlay para escurecer a imagem de fundo e melhorar a legibilidade */
+.heroSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Escurece a imagem */
+  z-index: 1;
 }
 
-.conteudoServicos li {
-  background: #ffffff;
-  border-radius: 8px;
+.servicosContent {
+  position: relative; /* Para garantir que o conteúdo fique acima do overlay */
+  z-index: 2;
+  max-width: 1200px; /* Limita a largura do conteúdo central */
+  margin: 0 auto; /* Centraliza o conteúdo */
+}
+
+.introText h1 {
+  font-family: 'Montserrat', sans-serif; /* Fonte mais moderna */
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para o texto do título */
+}
+
+.introText p {
+  font-family: 'Open Sans', sans-serif; /* Fonte legível para o parágrafo */
+  font-size: 1.3rem;
+  max-width: 700px;
+  margin: 0 auto 50px; /* Espaço maior antes dos cards */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Grid de Serviços */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Layout responsivo de grid */
+  gap: 30px; /* Espaçamento entre os cards */
   padding: 20px;
-  width: 280px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.serviceCard {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 8px 20px var(--shadow-light);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Para empurrar o botão para baixo */
+  text-align: left; /* Alinha o texto à esquerda dentro do card */
 }
 
-.conteudoServicos li:hover {
+.serviceCard:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 30px var(--shadow-medium);
 }
 
-.conteudoServicos h2 {
-  font-family: "Roboto", sans-serif;
-  font-size: 1.6rem;
-  color: #2a5298;
-  margin-bottom: 10px;
+.serviceCard h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  color: var(--primary-blue-light);
+  margin-bottom: 15px;
+  font-weight: 700;
 }
 
-.conteudoServicos p {
-  font-family: "Roboto", sans-serif;
-  font-size: 1rem;
-  color: #777;
-  margin-bottom: 20px;
+.serviceCard p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.05rem;
+  color: var(--text-dark);
+  margin-bottom: 25px;
+  line-height: 1.6;
+  flex-grow: 1; /* Permite que o parágrafo ocupe o espaço necessário */
+}
+
+.priceDuration {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px; /* Espaço acima do bloco de preço */
+  margin-bottom: 25px; /* Espaço antes do botão */
+  flex-wrap: wrap; /* Para responsividade em telas muito pequenas */
+  gap: 10px;
+}
+
+.priceDuration h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.priceDuration h3 span {
+  color: var(--primary-blue-dark); /* Dourado para destaque do preço */
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Botão de Agendar */
+.agendarButton {
+  background: linear-gradient(135deg, var(--primary-blue-dark), var(--primary-blue-light));
+  color: var(--text-light);
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%; /* Botão ocupa a largura total do card */
+  box-shadow: 0 4px 10px rgba(42, 82, 152, 0.3);
+}
+
+.agendarButton:hover {
+  background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-blue-dark));
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(42, 82, 152, 0.4);
+}
+
+/* --- Responsividade --- */
+@media (max-width: 992px) {
+  .introText h1 {
+    font-size: 3rem;
+  }
+  .introText p {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    padding: 60px 15px;
+    min-height: 350px;
+  }
+
+  .introText h1 {
+    font-size: 2.5rem;
+  }
+
+  .introText p {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+  }
+
+  .servicesGrid {
+    grid-template-columns: 1fr; /* Uma coluna no mobile */
+    padding: 15px;
+  }
+
+  .serviceCard {
+    padding: 25px;
+  }
+
+  .serviceCard h2 {
+    font-size: 1.6rem;
+  }
+
+  .serviceCard p {
+    font-size: 0.95rem;
+  }
+
+  .priceDuration h3 {
+    font-size: 1.05rem;
+  }
+
+  .priceDuration h3 span {
+    font-size: 1.15rem;
+  }
+
+  .agendarButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 50px 10px;
+    min-height: 300px;
+  }
+
+  .introText h1 {
+    font-size: 2rem;
+  }
+
+  .introText p {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+  }
+
+  .serviceCard {
+    padding: 20px;
+  }
+
+  .serviceCard h2 {
+    font-size: 1.4rem;
+  }
 }

@@ -1,81 +1,221 @@
-.horas {
+/* Agendar.module.css */
+
+/* Estilos globais para a página */
+.mainContent {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
   display: flex;
-  width: 500px;
-  overflow-x: auto;
-  margin: 0 auto;
-  justify-content: center;
-}
-
-.selectHoras {
-  min-width: 350px;
-  margin-top: 5px;
-  padding: 6px;
-  border-radius: 6px;
-}
-
-.chooseTime {
-  align-self: center;
-  padding-right: 5px;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.selectHoras select {
-  appearance: none;
-  width: 100%;
-  font-size: 1.15rem;
-  padding: 0.675em 6em 0.675em 1em;
-  background-color: #fff;
-  border: 1px solid #caced1;
-  border-radius: 0.25rem;
-  color: #000;
-  cursor: pointer;
-}
-
-.submitData {
+  flex-direction: column;
   align-items: center;
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0.25rem;
-  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
-  box-sizing: border-box;
-  color: rgba(0, 0, 0, 0.85);
-  cursor: pointer;
-  display: inline-flex;
-  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica,
-    Arial, sans-serif;
-  font-size: 16px;
+  gap: 20px;
+}
+
+.title {
+  font-size: 2.8rem;
+  color: #2c3e50; /* Azul escuro */
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.subtitle strong {
+  color: #2a5298; /* Azul primário */
   font-weight: 600;
+}
+
+/* Container para a seleção de calendário e horários (estilizado com StyledSchedulerContainer) */
+/* Este div não terá todos os estilos diretamente, pois a maioria está no StyledSchedulerContainer */
+/* Pode ser usado para espaçamento interno se StyledSchedulerContainer tiver padding */
+
+/* Seção do Calendário (lado esquerdo no desktop) */
+.calendarSection {
+  flex: 1; /* Ocupa espaço disponível */
+  min-width: 300px; /* Garante que o calendário não fique muito pequeno */
+  padding: 20px; /* Espaçamento interno */
+  display: flex; /* Para alinhar o DatePicker */
   justify-content: center;
-  line-height: 1.25;
-  margin: 0;
-  min-height: 3rem;
-  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
-  position: relative;
-  text-decoration: none;
-  transition: all 250ms;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  width: auto;
+  align-items: center;
 }
 
-.submitData:hover,
-.submitData:focus {
-  border-color: rgba(0, 0, 0, 0.15);
-  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
-  color: rgba(0, 0, 0, 0.65);
+/* Seção de Horários (lado direito no desktop) */
+.timeSlotsSection {
+  flex: 1; /* Ocupa espaço disponível */
+  min-width: 300px; /* Garante que a seção de horários não fique muito pequena */
+  padding: 20px; /* Espaçamento interno */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o conteúdo horizontalmente */
+  gap: 20px; /* Espaçamento entre os elementos internos */
+  border-left: 1px solid #eee; /* Linha divisória no desktop */
 }
 
-.submitData:hover {
-  transform: translateY(-1px);
+@media (max-width: 768px) {
+  .timeSlotsSection {
+    border-left: none; /* Remove a borda no mobile */
+    border-top: 1px solid #eee; /* Adiciona uma borda superior no mobile */
+  }
 }
 
-.submitData:active {
-  background-color: #f0f0f1;
-  border-color: rgba(0, 0, 0, 0.15);
-  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
-  color: rgba(0, 0, 0, 0.65);
-  transform: translateY(0);
+.timeSlotsTitle {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Container dos Botões de Horário */
+.timeButtonsContainer {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os botões quebrem a linha */
+  gap: 10px; /* Espaçamento entre os botões */
+  justify-content: center; /* Centraliza os botões */
+  max-height: 300px; /* Limita a altura e adiciona rolagem */
+  overflow-y: auto; /* Adiciona rolagem vertical se exceder a altura */
+  padding-right: 5px; /* Espaçamento para a barra de rolagem */
+}
+
+/* Estilo do Botão de Horário Individual */
+.timeButton {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 90px; /* Largura mínima para os botões de hora */
+  text-align: center;
+}
+
+.timeButton:hover {
+  background-color: #e0e0e0;
+  border-color: #aaa;
+  color: #111;
+}
+
+.timeButton.selectedTime {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  border-color: #1e3c72;
+  box-shadow: 0 4px 10px rgba(42, 82, 152, 0.3);
+  font-weight: 700;
+}
+
+/* Mensagem de Nenhum Horário Disponível */
+.noTimesMessage {
+  font-size: 1.1rem;
+  color: #777;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Container de Carregamento */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 50px;
+  color: #2a5298;
+  font-size: 1.1rem;
+}
+
+/* Botão de Agendar Agora (Substitui submitData) */
+.submitButton {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px; /* Limita a largura do botão */
+  box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Espaçamento para o spinner */
+}
+
+.submitButton:hover {
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(42, 82, 152, 0.4);
+}
+
+.submitButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+  .mainContent {
+    margin: 20px auto;
+    padding: 0 15px;
+    gap: 15px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .StyledSchedulerContainer {
+    flex-direction: column; /* Empilha as seções */
+    margin: 20px auto;
+  }
+
+  .calendarSection,
+  .timeSlotsSection {
+    padding: 15px;
+    min-width: unset; /* Remove largura mínima no mobile */
+  }
+
+  .timeSlotsTitle {
+    font-size: 1.5rem;
+  }
+
+  .timeButton {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    min-width: 80px;
+  }
+
+  .submitButton {
+    padding: 12px 20px;
+    font-size: 1rem;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .timeSlotsTitle {
+    font-size: 1.3rem;
+  }
 }

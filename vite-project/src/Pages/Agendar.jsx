@@ -1,53 +1,62 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
-import { NavLink, useParams } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { NavLink, useParams, useNavigate } from "react-router-dom"; // Removido 'replace' se não estiver usando
+import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker"; // Mantive DatePicker para flexibilidade
 import agendar from "../styles/Agendar.module.css";
 import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Box } from "@mui/material";
-import { useCalendarState } from "@mui/x-date-pickers/internals";
+import { CircularProgress, Snackbar, Alert } from "@mui/material"; // Para loading e feedback
 
-const PRIMARY_BLUE = "#212F3D"; // Azul escuro da sua barra
-const ACCENT_GOLD = "#FFD700"; // Um dourado/mostarda para destaque (sugestão)
-const LIGHT_GREY_BG = "#f8f8f8"; // Fundo mais claro para o corpo
-const TEXT_DARK = "#333333";
-const TEXT_LIGHT = "#eeeeee";
-const StyledCalendarContainer = styled("div")(({ theme }) => ({
-  backgroundColor: "#ffffff", // Fundo branco para o calendário
-  // Bordas mais arredondadas
-  // boxShadow: theme.shadows[5], // Uma sombra mais proeminente
-  overflow: "hidden", // Para garantir que o arredondamento funciona
-  maxWidth: 800, // Ajuste a largura conforme necessário
+// Cores base para o tema, importadas ou definidas aqui
+const PRIMARY_BLUE = "#212F3D";
+const ACCENT_GOLD = "#FFD700";
+const LIGHT_GREY_BG = "#f8f8f8";
+const TEXT_LIGHT = "#fff";
+
+// Container estilizado para o calendário e seleção de horários
+const StyledSchedulerContainer = styled("div")(({ theme }) => ({
+  backgroundColor: "#ffffff",
+  borderRadius: "16px", // Bordas mais arredondadas para o container geral
+  boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)", // Sombra elegante
+  overflow: "hidden",
+  maxWidth: 900, // Ajuste a largura máxima
   width: "100%",
-  margin: "20px auto", // Centraliza na página
-  border: `1px solid ${LIGHT_GREY_BG}`, // Borda sutil,
+  margin: "40px auto", // Centraliza e dá espaçamento
+  display: "flex", // Para alinhar calendário e horários
+  flexDirection: "column", // Padrão é coluna para mobile
+  [theme.breakpoints.up("md")]: {
+    flexDirection: "row", // No desktop, coloca lado a lado
+  },
+  border: `1px solid ${LIGHT_GREY_BG}`, // Borda sutil
 }));
+
 const Agendar = () => {
+  const navigate = useNavigate();
   const params = new URLSearchParams(window.location.search);
   const token = localStorage.getItem("token");
-  const [value, setValue] = React.useState(dayjs());
-  const [arrayHoras, setArrayHoras] = React.useState([]);
-  const [tempo, setTempo] = React.useState(null);
-  const [user, setUser] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [resposta, setResposta] = React.useState("Enviar");
-  const [intervalo, setIntervalo] = React.useState(null);
-  function clearLocal() {
-    localStorage.removeItem("token");
-    window.location.reload();
-  }
+
+  // Dados do serviço da URL
+  const servicoParam = params.get("servico");
+  const tempoServicoParam = params.get("tempo"); // Duração do serviço em minutos
+
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [availableTimes, setAvailableTimes] = useState([]); // Horários disponíveis
+  const [selectedTime, setSelectedTime] = useState(null); // Horário selecionado pelo usuário
+  const [loading, setLoading] = useState(false); // Estado de carregamento
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  }); // Feedback ao usuário
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const diasSemana = {
     Sun: "Domingo",
     Tue: "Terca",
@@ -58,155 +67,315 @@ const Agendar = () => {
     Mon: "Segunda",
   };
 
-  const dados = {
-    tempo,
-    value,
-    servico: params.get("servico"),
-    hora: params.get("tempo"),
-    intervalo,
-    diaSemana: diasSemana[value.format("ddd")],
-  };
-  React.useEffect(() => {
-    const dia = value.format("ddd");
+  // Redireciona se os parâmetros de serviço não estiverem presentes
+  useEffect(() => {
+    if (!servicoParam || !tempoServicoParam) {
+      alert("Por favor, selecione um serviço e sua duração antes de agendar.");
+      navigate("/logado", { replace: true }); // Ou para a página de seleção de serviço
+    }
+  }, [servicoParam, tempoServicoParam, navigate]);
 
-    const getTimes = async () => {
+  // Efeito para buscar horários disponíveis quando a data selecionada muda
+  useEffect(() => {
+    const fetchTimes = async () => {
+      setLoading(true);
+      setAvailableTimes([]); // Limpa horários anteriores
+      setSelectedTime(null); // Limpa seleção de horário
+
+      const diaFormatado = diasSemana[selectedDate.format("ddd")];
+      if (!diaFormatado) {
+        setSnackbar({
+          open: true,
+          message: "Dia da semana inválido.",
+          severity: "error",
+        });
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch("http://localhost:5000/getTimes", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ dia: diasSemana[dia] }),
+          body: JSON.stringify({ dia: diaFormatado }),
         });
 
         const data = await response.json();
 
-        const newHoras = data.disponiveis || null;
-        console.log(newHoras);
-        const intervalo = data.intervalo || null;
-        setArrayHoras(newHoras);
-        setIntervalo(intervalo);
-        if (newHoras.length > 0) {
-          setTempo(newHoras[0]);
+        if (response.ok) {
+          const fetchedTimes = data.disponiveis || [];
+          setAvailableTimes(fetchedTimes);
+          if (fetchedTimes.length > 0) {
+            setSelectedTime(fetchedTimes[0]); // Seleciona o primeiro horário disponível por padrão
+          }
         } else {
-          setTempo(null);
+          setSnackbar({
+            open: true,
+            message: data.message || "Erro ao carregar horários disponíveis.",
+            severity: "warning", // Warning se não há horários, erro se falha na API
+          });
         }
       } catch (err) {
-        console.log(err);
+        console.error("Erro na requisição getTimes:", err);
+        setSnackbar({
+          open: true,
+          message: "Erro de conexão ao buscar horários. Tente novamente.",
+          severity: "error",
+        });
+      } finally {
+        setLoading(false);
       }
     };
-    getTimes();
-  }, [value]);
 
+    fetchTimes();
+  }, [selectedDate]); // Re-executa quando a data selecionada muda
+
+  // Função para lidar com o envio do agendamento
   async function handleSubmit() {
-    const response = await fetch("http://localhost:5000/createSchedule", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(dados),
-    });
-    const data = await response.json();
-    setResposta(data.message);
+    if (!selectedDate || !selectedTime || !servicoParam || !tempoServicoParam) {
+      setSnackbar({
+        open: true,
+        message: "Por favor, selecione a data, horário, serviço e duração.",
+        severity: "warning",
+      });
+      return;
+    }
+
+    setLoading(true);
+    const agendamentoData = {
+      tempo: selectedTime, // Horário de início selecionado
+      servico: servicoParam,
+      hora: Number(tempoServicoParam), // Duração do serviço (certifique-se de que é um número)
+      diaSemana: diasSemana[selectedDate.format("ddd")],
+      // O intervalo não é mais necessário aqui, pois o backend calcula os slots
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/createSchedule", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(agendamentoData),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setSnackbar({
+          open: true,
+          message: data.message,
+          severity: "success",
+        });
+        // Redireciona após um pequeno delay para o usuário ver a mensagem de sucesso
+        setTimeout(() => {
+          navigate("/agendamentos", { replace: true });
+        }, 1500);
+      } else {
+        setSnackbar({
+          open: true,
+          message: data.message || "Erro ao criar agendamento.",
+          severity: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao enviar agendamento:", error);
+      setSnackbar({
+        open: true,
+        message: "Erro de conexão ao agendar. Tente novamente.",
+        severity: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
+
+  // Função para limpar o token e recarregar a página (sair)
+  const clearLocal = useCallback(() => {
+    localStorage.removeItem("token");
+    window.location.reload();
+  }, []);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   return (
     <>
-      <header className={`${global.container}`}>
-        <div className={`${header.headerMenu}`}>
-          <div className={global.imagemLogo}>
-            <NavLink to="/" end>
-              <img src={logo} alt="Logo Barbearia" />
-            </NavLink>
-          </div>
-          <div className={`${header.menuBarber}`}>
-            <ul>
-              <li>
-                <NavLink className={`${header.NavLink}`} to="/agendamentos">
-                  Meus agendamentos
-                </NavLink>
-              </li>
-              <li>
-                <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                  Sair
-                </NavLink>
-              </li>
-            </ul>
-          </div>
+      <header className={`${global.container} ${header.headerMenu}`}>
+        <div className={global.imagemLogo}>
+          <NavLink to="/logado" end>
+            {" "}
+            {/* Mudei para /logado, pois / já é a landing page */}
+            <img src={logo} alt="Logo Barbearia" />
+          </NavLink>
         </div>
+        <nav className={`${header.menuBarber}`}>
+          <ul>
+            <li>
+              <NavLink className={`${header.NavLink}`} to="/agendamentos">
+                Meus Agendamentos
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
+                Sair
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
       </header>
 
-      <main>
-        <h1>Selecione o dia para seu agendamento.</h1>
+      <main className={agendar.mainContent}>
+        <h1 className={agendar.title}>Agende seu Horário</h1>
+        <p className={agendar.subtitle}>
+          Serviço: <strong>{servicoParam || "N/A"}</strong> | Duração:{" "}
+          <strong>
+            {tempoServicoParam ? `${tempoServicoParam} minutos` : "N/A"}
+          </strong>
+        </p>
+
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           localeText={{
-            okButtonLabel: "Confirmar", // Garante o texto do botão OK
-            cancelButtonLabel: "Cancelar", // Garante o texto do botão Cancelar
+            okButtonLabel: "Confirmar",
+            cancelButtonLabel: "Cancelar",
           }}
         >
-          <StyledCalendarContainer>
-            <DatePicker
-              value={value}
-              onChange={(target) => {
-                setValue(target);
-              }}
-              orientation={isMobile ? "portrait" : "landscape"}
-              sx={{
-                backgroundColor: "white",
-                borderRadius: "16px", // Bordas do container do dialog
-                width: "100%", // Para ele ocupar o espaço do pai
+          <StyledSchedulerContainer>
+            {/* Calendar Section */}
+            <div className={agendar.calendarSection}>
+              <DatePicker
+                value={selectedDate}
+                onChange={(newValue) => setSelectedDate(newValue)}
+                orientation={isMobile ? "portrait" : "landscape"}
+                slotProps={{
+                  actionBar: {
+                    actions: ["clear", "today", "accept"],
+                  },
+                }}
+                sx={{
+                  width: "100%", // Ocupa a largura total da seção
+                  "& .MuiPickersLayout-root": {
+                    flexDirection: isMobile ? "column" : "row",
+                    alignItems: "stretch",
+                  },
+                  "& .MuiPickersLayout-contentWrapper": {
+                    padding: isMobile ? "10px" : "16px", // Ajusta padding interno
+                    minWidth: isMobile ? "100%" : "300px", // Garante largura mínima
+                  },
+                  "& .MuiPickersCalendarHeader-root": {
+                    // Estilos para o cabeçalho do calendário (Mês, Ano)
+                    backgroundColor: PRIMARY_BLUE, // Cor de fundo do cabeçalho
+                    color: TEXT_LIGHT, // Cor do texto do cabeçalho
+                    borderRadius: "8px 8px 0 0",
+                    padding: "10px 16px",
+                  },
+                  "& .MuiButtonBase-root": {
+                    // Botões de navegação do calendário e seleção de dia
+                    color: PRIMARY_BLUE, // Cor dos ícones de navegação
+                  },
+                  "& .MuiPickersDay-root.Mui-selected": {
+                    // Dia selecionado
+                    backgroundColor: `${PRIMARY_BLUE} !important`,
+                    color: TEXT_LIGHT,
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: `${PRIMARY_BLUE} !important`,
+                      opacity: 0.9,
+                    },
+                  },
+                  "& .MuiPickersDay-today": {
+                    // Dia de hoje
+                    borderColor: `${ACCENT_GOLD} !important`,
+                    borderWidth: "2px",
+                  },
+                  // Estilos para as ações (OK, Cancelar, etc.)
+                  "& .MuiDialogActions-root": {
+                    padding: "16px",
+                    justifyContent: "space-around",
+                    "& .MuiButton-root": {
+                      backgroundColor: PRIMARY_BLUE,
+                      color: TEXT_LIGHT,
+                      "&:hover": {
+                        backgroundColor: ACCENT_GOLD,
+                      },
+                    },
+                  },
+                }}
+              />
+            </div>
 
-                ".MuiPickersLayout-contentWrapper": {
-                  minWidth: isMobile ? "100%" : "280px",
-                  padding: "16px",
-                },
-
-                ".MuiPickersLayout-root": {
-                  flexDirection: isMobile ? "column" : "row",
-                  alignItems: "stretch",
-                },
-              }}
-            />
-            {
-              <div className={`${agendar.horas}`}>
-                {arrayHoras ? (
-                  <>
-                    <span className={`${agendar.chooseTime}`}>
-                      Selecione o horário:
-                    </span>
-                    <select
-                      value={tempo}
-                      className={`${agendar.selectHoras}`}
-                      onChange={({ target }) => {
-                        setTempo(target.value);
-                      }}
+            {/* Time Slots Section */}
+            <div className={agendar.timeSlotsSection}>
+              <h2 className={agendar.timeSlotsTitle}>
+                Horários Disponíveis para {selectedDate.format("DD/MM")}
+              </h2>
+              {loading ? (
+                <div className={agendar.loadingContainer}>
+                  <CircularProgress size={40} sx={{ color: PRIMARY_BLUE }} />
+                  <p>Carregando horários...</p>
+                </div>
+              ) : availableTimes.length > 0 ? (
+                <div className={agendar.timeButtonsContainer}>
+                  {availableTimes.map((time) => (
+                    <button
+                      key={time}
+                      className={`${agendar.timeButton} ${
+                        selectedTime === time ? agendar.selectedTime : ""
+                      }`}
+                      onClick={() => setSelectedTime(time)}
                     >
-                      {arrayHoras.map((item) => {
-                        return (
-                          <option
-                            key={item}
-                            value={item}
-                            className={`${agendar.horaBotao}`}
-                          >
-                            {item}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </>
-                ) : (
-                  <span>Nenhum horário disponível para o dia</span>
-                )}
-              </div>
-            }
-          </StyledCalendarContainer>
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className={agendar.noTimesMessage}>
+                  Nenhum horário disponível para o dia selecionado.
+                  <br />
+                  Por favor, escolha outra data.
+                </p>
+              )}
+
+              {availableTimes.length > 0 && (
+                <button
+                  className={`${agendar.submitButton}`}
+                  onClick={handleSubmit}
+                  disabled={loading || !selectedTime}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Agendar Agora"
+                  )}
+                </button>
+              )}
+            </div>
+          </StyledSchedulerContainer>
         </LocalizationProvider>
-        <button className={`${agendar.submitData}`} onClick={handleSubmit}>
-          {resposta}
-        </button>
       </main>
+
+      {/* Snackbar para feedback ao usuário */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

@@ -1,41 +1,106 @@
-body,
+/* global.module.css */
+
+/* Reset básico e tipografia */
 html {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  color: #333;
+  height: 100%; /* Garante que o html ocupe toda a altura */
+  width: 100%; /* Garante que o html ocupe toda a largura */
+  box-sizing: border-box; /* Garante que padding e border não adicionem largura/altura extra */
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: inherit; /* Herda o box-sizing para todos os elementos */
+}
+
+body {
+  margin: 0; /* Remove a margem padrão do body */
+  padding: 0; /* Remove o padding padrão do body */
+  min-height: 100vh; /* Garante que o body tenha no mínimo 100% da altura do viewport */
+  width: 100%; /* Garante que o body ocupe toda a largura */
+  display: flex; /* Define o body como um contêiner flex */
+  flex-direction: column; /* Organiza os filhos em coluna */
+  font-family: "Poppins", sans-serif; /* Aplica a fonte Poppins */
+  color: #333; /* Cor de texto padrão */
+  background-color: #f0f2f5; /* Um cinza claro suave para o fundo da página */
+  overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+}
+
+.pai {
+  display: flex;
+
+  flex-direction: column;
+  flex: 1; /* Permite que o .pai ocupe o espaço restante no body flex */
+  width: 100%; /* Garante que o .pai ocupe 100% da largura disponível */
+}
+
+/* Ocupa o espaço restante verticalmente */
+main {
+  flex: 1;
+  width: 100%; /* Garante que o main ocupe 100% da largura */
+  box-sizing: border-box; /* Inclui padding e border na largura */
+}
+
+/* Contêiner para centralizar e adicionar padding ao conteúdo */
+.container {
+  max-width: 1200px; /* Limita a largura máxima do conteúdo */
+  margin: 0 auto; /* Centraliza o contêiner */
+  padding: 20px; /* Padding padrão para o conteúdo */
+  width: 100%; /* Garante que o contêiner ocupe 100% da largura até o max-width */
+  box-sizing: border-box; /* Inclui padding na largura total */
+}
+
+/* Estilo para imagem de logo (se não for no header específico) */
+/* Se você já tem um estilo mais específico no Header.module.css, este será sobrescrito.
+   Mantenha este se precisar de um estilo padrão para logos fora do cabeçalho. */
+.imagemLogo img {
+  width: 60px; /* Tamanho consistente com o header (sugestão) */
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block; /* Remove espaço extra abaixo da imagem */
+}
+
+/* Estilos para formulários (seções específicas no .global, caso não tenham um módulo próprio) */
 form {
   background: white;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Garantir que o formulário ocupe 90% da largura */
-  max-width: 400px; /* Limitar o tamanho máximo do formulário */
+  width: 90%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
+  margin: 20px auto; /* Centraliza formulários */
 }
 
-.pai {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-main {
-  flex: 1;
-}
-
-.container {
+/* Rodapé (garante que ele sempre fique na parte inferior) */
+/* Se você tem um Footer.jsx com seu próprio CSS, isso pode não ser necessário aqui */
+/* Mas é uma boa prática para layouts de "sticky footer" */
+footer {
+  width: 100%;
   padding: 20px;
+  background-color: var(
+    --primary-blue-dark
+  ); /* Exemplo de cor de fundo do footer */
+  color: var(--text-light); /* Exemplo de cor de texto do footer */
+  text-align: center;
+  margin-top: auto; /* Empurra o footer para o final do contêiner flex */
 }
 
-.imagemLogo img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
+/* Adicionando variáveis CSS para cores e fontes, se ainda não estiverem no :root do App.module.css */
+/* É melhor ter isso em um único lugar, como App.module.css ou um arquivo de variáveis dedicado */
+:root {
+  --primary-blue-dark: #1e3c72;
+  --primary-blue-light: #2a5298;
+  --accent-gold: #ffc107;
+  --text-dark: #333;
+  --text-light: #f9f9f9;
+  --bg-light: #f4f7fc; /* Fundo geral da aplicação */
+  --card-bg: #ffffff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
 }
+
+/* Importar fontes do Google Fonts (se você ainda não o fez no seu index.html) */
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&family=Poppins:wght@300;400;500;600;700&display=swap'); */

@@ -1,54 +1,221 @@
-.label {
-  font-weight: bold;
-  margin-top: 10px;
+/* Register.module.css */
+
+/* Cores e fontes - Boas práticas para consistência */
+:root {
+  --primary-blue-dark: #1e3c72;
+  --primary-blue-light: #2a5298;
+  --accent-gold: #ffc107;
+  --text-dark: #333;
+  --text-light: #f9f9f9;
+  --bg-light: #f4f7fc;
+  --card-bg: #ffffff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --error-red: #e74c3c;
+  --input-border-light: #ddd;
+  --input-focus-border: #2a5298;
 }
 
-.input {
-  padding: 12px;
-  border-radius: 6px;
-  border: 2px solid #ddd;
-  font-size: 1rem;
-  width: 100%; /* Faz os inputs ocuparem toda a largura disponível */
-  margin-top: 5px;
-  box-sizing: border-box; /* Inclui o padding dentro da largura */
-}
-
-.button {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: white;
-  font-size: 1rem;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: all 0.3s;
-}
-
-.button:hover {
-  background: linear-gradient(135deg, #2a5298, #1e3c72);
-}
-
-.resposta {
-  margin: 5px auto;
-  font-size: 1rem;
-}
-
-.observacao {
-  font-size: 0.9rem;
-  text-align: center;
-  margin-top: 15px;
-}
-
-h1 {
-  color: #1e3c72;
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-main {
+/* Container principal da página de registro */
+.registerPageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  justify-content: center; /* Centraliza verticalmente na main */
+  min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 60px)); /* Ajustar para altura real do header/footer */
+  padding: 40px 20px;
+  background-color: var(--bg-light); /* Fundo suave */
+}
+
+/* Título da página */
+.title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8rem;
+  color: var(--primary-blue-dark);
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Formulário principal */
+.form {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px var(--shadow-medium);
+  width: 100%;
+  max-width: 500px; /* Aumentei um pouco a largura máxima */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaçamento entre os grupos de formulário */
+  box-sizing: border-box;
+}
+
+/* Grupo de formulário (label + input + erro) */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px; /* Espaço entre label e input */
+  font-size: 1.05rem;
+}
+
+.input {
+  padding: 14px;
+  border-radius: 8px; /* Bordas mais arredondadas */
+  border: 1px solid var(--input-border-light);
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none; /* Remove outline padrão */
+  box-sizing: border-box; /* Garante padding dentro da largura */
+}
+
+.input:focus {
+  border-color: var(--input-focus-border); /* Cor da borda ao focar */
+  box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.2); /* Sombra suave ao focar */
+}
+
+.inputError {
+  border-color: var(--error-red) !important; /* Borda vermelha para erro */
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important; /* Sombra vermelha para erro */
+}
+
+.errorMessage {
+  color: var(--error-red);
+  font-size: 0.85rem;
+  margin-top: 5px; /* Espaço entre input e mensagem de erro */
+  text-align: left;
+}
+
+/* Requisitos de senha */
+.passwordRequirements {
+  list-style: none; /* Remove bullets */
+  padding: 0;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #777;
+  line-height: 1.5;
+}
+
+.passwordRequirements li {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.passwordRequirements li::before {
+  content: '✔'; /* Ícone de check */
+  color: var(--primary-blue-light);
+  font-weight: bold;
+}
+/* Estilo para quando o requisito não é atendido (opcional, requer lógica JS) */
+/*
+.passwordRequirements li.invalid::before {
+  content: '✖';
+  color: var(--error-red);
+}
+*/
+
+
+/* Botão de Registro */
+.submitButton {
+  background: linear-gradient(135deg, var(--primary-blue-dark), var(--primary-blue-light));
+  color: var(--text-light);
+  font-size: 1.15rem; /* Fonte maior */
+  padding: 15px;
+  border: none;
+  border-radius: 8px; /* Bordas mais arredondadas */
+  cursor: pointer;
+  margin-top: 25px; /* Mais espaço acima do botão */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(42, 82, 152, 0.3);
+  display: flex; /* Para centralizar o spinner */
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Espaço entre texto e spinner */
+}
+
+.submitButton:hover:not(:disabled) { /* Não aplica hover se desabilitado */
+  background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-blue-dark));
+  transform: translateY(-3px); /* Efeito de "levantar" */
+  box-shadow: 0 6px 20px rgba(42, 82, 152, 0.4);
+}
+
+.submitButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  opacity: 0.8;
+}
+
+/* Removendo as classes .resposta e .observacao antigas se forem substituídas */
+/* A classe .resposta agora será .errorMessage em cada campo ou no Snackbar */
+.resposta {
+  display: none; /* Escondendo o span de resposta antigo */
+}
+.observacao {
+  display: none; /* Escondendo as observações antigas se as passwordRequirements forem usadas */
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+  .registerPageContainer {
+    padding: 30px 15px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+  }
+
+  .form {
+    padding: 30px;
+    gap: 15px;
+  }
+
+  .label {
+    font-size: 1rem;
+  }
+
+  .input {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .passwordRequirements {
+    font-size: 0.8rem;
+  }
+
+  .submitButton {
+    padding: 12px;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registerPageContainer {
+    padding: 20px 10px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    padding: 20px;
+  }
+
+  .input {
+    padding: 10px;
+  }
 }

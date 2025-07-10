@@ -1,8 +1,8 @@
 /* agendamentos.module.css */
 
-/* Conteúdo Principal (Centraliza e adiciona padding) */
+/* Conteúdo Principal */
 .mainContent {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 0 20px;
   display: flex;
@@ -13,99 +13,183 @@
 
 /* Título da Página */
 .mainContent h1 {
-  font-size: 2.5rem;
-  color: #333333;
-  margin-bottom: 20px;
+  font-size: 2.8rem;
+  color: #2c3e50; /* Um tom de azul mais escuro */
+  margin-bottom: 25px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Container dos Cards de Agendamento */
-.agendamentosContainer {
-  display: flex; /* Mantém display flex */
-  flex-wrap: wrap; /* <--- CRUCIAL: Permite que os cards quebrem a linha */
-  justify-content: center; /* <--- Centraliza os cards quando houver espaço extra */
-  gap: 25px; /* Espaçamento entre os cards */
-  width: 100%; /* Ocupa 100% da largura disponível */
+/* Botões de Filtro */
+.filterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px; /* Limita a largura dos botões de filtro */
 }
 
-/* Estilo do Card de Agendamento Individual */
-.agendamentoCard {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+.filterButton {
+  background-color: #f0f0f0;
+  color: #555;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1 1 auto; /* Permite que os botões cresçam e encolham */
+  min-width: 120px; /* Largura mínima para botões */
+  text-align: center;
+}
+
+.filterButton:hover {
+  background-color: #e0e0e0;
+  border-color: #ccc;
+  color: #333;
+}
+
+.filterButton.activeFilter {
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* Degradê vibrante */
+  color: #fff;
+  border-color: #1e3c72;
+  box-shadow: 0 4px 10px rgba(42, 82, 152, 0.3);
+}
+
+/* Lista de Agendamentos (ul) */
+.agendamentosList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Ocupa a largura total do mainContent */
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  transition: transform 0.2s ease-in-out;
-
-  /* --- CRUCIAL PARA RESPONSIVIDADE COM FLEX --- */
-  flex: 1 1 calc(33.333% - 25px); /* <--- Tenta 3 colunas, ajusta o tamanho */
-  /* flex-grow: 1 (pode crescer), flex-shrink: 1 (pode encolher),
-                                      flex-basis: calc(33.333% - 25px) (base de 1/3 da largura menos o gap) */
-  min-width: 280px; /* <--- Largura mínima para o card não ficar ilegível */
-  max-width: 350px; /* <--- Opcional: Largura máxima para não ficar muito largo em telas enormes */
-
-  /* Para o caso de ter apenas um card em tela grande, ele não fica 100% da largura */
-  /* Se quiser que um único card ocupe 100% em tela grande, remova o max-width e ajuste o flex-basis */
+  gap: 20px; /* Espaçamento entre os itens da lista */
 }
 
-.agendamentoCard:hover {
-  transform: translateY(-5px);
+/* Item Individual da Lista (li) */
+.agendamentoItem {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 25px 30px;
+  display: flex;
+  flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px 30px; /* Espaçamento vertical e horizontal entre elementos */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-left: 6px solid #2a5298; /* Borda de destaque padrão */
 }
 
-/* Títulos dentro do Card (Nome, Serviço) */
-.agendamentoCard h1,
-.agendamentoCard h2 {
-  font-size: 1.3rem;
+.agendamentoItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Estilos para status específicos */
+.agendamentoItem.pendente {
+  border-left-color: #f39c12; /* Amarelo/Laranja para pendente */
+}
+
+.agendamentoItem.aceito {
+  border-left-color: #27ae60; /* Verde para aceito */
+}
+
+.agendamentoItem.cancelado {
+  border-left-color: #e74c3c; /* Vermelho para cancelado */
+  opacity: 0.7;
+  background-color: #fdf6f5; /* Fundo mais claro para cancelados */
+}
+
+/* Detalhes do Agendamento dentro do item */
+.agendamentoDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1; /* Permite que os detalhes ocupem o espaço disponível */
+}
+
+.agendamentoDetails h3 {
+  font-size: 1.4rem;
   color: #212f3d;
   margin: 0;
   font-weight: 600;
 }
 
-/* Dados (Nome, Serviço, Início, Término) */
-.agendamentoCard h1 span,
-.agendamentoCard h2 span {
+.agendamentoDetails h3 span,
+.agendamentoDetails p span {
   font-size: 1.2rem;
-  color: #333333;
+  color: #555;
   font-weight: normal;
-  margin-left: 8px;
+  margin-left: 5px;
 }
 
-/* Estilos para Início e Término (se forem h2 ou p) */
-.agendamentoCard h2 {
+.agendamentoDetails p {
   font-size: 1.1rem;
-  color: #333333;
-  font-weight: normal;
-}
-.agendamentoCard h2:not(:first-child) {
-  font-weight: 600;
-}
-.agendamentoCard h2 span {
-  font-weight: normal;
+  color: #444;
+  margin: 0;
 }
 
-/* Botão de Cancelar Pequeno (dentro do card) */
-.botaoCancelarPequeno {
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+/* Texto do Status */
+.statusText {
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+.statusPendente {
+  background-color: #fef0d7;
+  color: #e67e22; /* Laranja mais escuro */
+}
+
+.statusAceito {
+  background-color: #e6ffee;
+  color: #28a745; /* Verde mais escuro */
+}
+
+.statusCancelado {
+  background-color: #fcebeb;
+  color: #dc3545; /* Vermelho mais escuro */
+}
+
+/* Botão de Cancelar */
+.cancelButton {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: #fff;
-  padding: 8px 15px;
-  border: 1px solid #212f3d;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  align-self: flex-end;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  white-space: nowrap; /* Evita que o texto do botão quebre */
+  box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
 }
 
-.botaoCancelarPequeno:hover {
-  background: #72b2f1;
+.cancelButton:hover {
+  background: linear-gradient(135deg, #c0392b, #a52a22);
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(192, 57, 43, 0.3);
 }
 
+/* Mensagem de nenhum agendamento */
+.noAppointments {
+  font-size: 1.3rem;
+  color: #777;
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* --- Responsividade --- */
 @media (max-width: 768px) {
   .mainContent {
     margin: 20px auto;
@@ -114,28 +198,43 @@
   }
 
   .mainContent h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
-  .agendamentoCard {
-    flex: 1 1 100%; /* <--- OCUPA 100% DA LARGURA DISPONÍVEL NO MOBILE */
-    max-width: unset; /* Remove o max-width para não limitar no mobile */
+  .filterButtons {
+    flex-direction: column; /* Empilha os botões no mobile */
+    max-width: 300px; /* Largura menor para botões empilhados */
+  }
+
+  .filterButton {
+    min-width: unset; /* Remove a largura mínima */
+  }
+
+  .agendamentoItem {
+    flex-direction: column; /* Empilha detalhes e botão de cancelar */
+    align-items: flex-start; /* Alinha o conteúdo à esquerda */
     padding: 20px;
     gap: 10px;
   }
 
-  .agendamentoCard h1,
-  .agendamentoCard h2 {
-    font-size: 1.2rem;
+  .agendamentoDetails h3 {
+    font-size: 1.3rem;
   }
 
-  .agendamentoCard h1 span,
-  .agendamentoCard h2 span {
+  .agendamentoDetails h3 span,
+  .agendamentoDetails p span {
     font-size: 1.1rem;
   }
 
-  .botaoCancelar {
-    width: 90%;
+  .cancelButton {
+    width: 100%; /* Botão de cancelar ocupa toda a largura */
     padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent h1 {
+    font-size: 1.8rem;
   }
 }
