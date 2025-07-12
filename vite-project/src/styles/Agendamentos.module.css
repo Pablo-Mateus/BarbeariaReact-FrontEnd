@@ -1,5 +1,11 @@
 /* agendamentos.module.css */
 
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garante que o container ocupe no mínimo a altura total da tela */
+}
+
 /* Conteúdo Principal */
 .mainContent {
   max-width: 1000px;
@@ -9,6 +15,7 @@
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  flex: 1 0 auto;
 }
 
 /* Título da Página */

@@ -1,7 +1,7 @@
 import React from "react";
 import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
-import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg"; // Verifique o caminho e o nome real do arquivo
+import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
 import { NavLink } from "react-router-dom";
 import agendamentos from "../styles/Agendamentos.module.css";
 import Footer from "../utilitarios/Footer";
@@ -94,9 +94,28 @@ const Agendamentos = () => {
   });
 
   return (
-    <>
-     
-
+    <div className={agendamentos.pageWrapper}>
+      <header className={`${global.container} ${header.headerMenu}`}>
+        <div className={global.imagemLogo}>
+          <NavLink to="/logado" end>
+            <img src={logo} alt="Logo Barbearia" />
+          </NavLink>
+        </div>
+        <nav className={`${header.menuBarber}`}>
+          <ul>
+            <li>
+              <NavLink className={`${header.NavLink}`} to="/agendamentos">
+                Meus Agendamentos
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
+                Sair
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </header>
       <main className={agendamentos.mainContent}>
         <h1>Meus Agendamentos</h1>
 
@@ -212,7 +231,7 @@ const Agendamentos = () => {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
