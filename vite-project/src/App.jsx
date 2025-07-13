@@ -14,6 +14,8 @@ import ForgotPass from "./Pages/ForgotPass.jsx";
 import DefinirHorario from "./Pages/DefinirHorario.jsx";
 import Agendar from "./Pages/Agendar.jsx";
 import Agendamentos from "./Pages/Agendamentos.jsx";
+import Clientes from "./Pages/Clientes.jsx";
+
 function App() {
   return (
     <div className={global.pai}>
@@ -31,6 +33,7 @@ function App() {
         <Route element={<PrivateRouteAdm />}>
           <Route path="/logadoBarbeiro" element={<LogadoBarbeiro />} />
           <Route path="/DefinirHorario" element={<DefinirHorario />} />
+          <Route path="/Clientes" element={<Clientes />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
         <Route path="/forgotpass" element={<ForgotPass />}></Route>

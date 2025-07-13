@@ -164,15 +164,12 @@ const Agendar = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSnackbar({
-          open: true,
-          message: data.message,
-          severity: "success",
-        });
-        // Redireciona após um pequeno delay para o usuário ver a mensagem de sucesso
-        setTimeout(() => {
-          navigate("/agendamentos", { replace: true });
-        }, 1500);
+        // setSnackbar({
+        //   open: true,
+        //   message: data.message,
+        //   severity: "success",
+        // });
+        return <NavLink to="/agendamentos">Ir para seus agendamentos!</NavLink>;
       } else {
         setSnackbar({
           open: true,
@@ -254,11 +251,6 @@ const Agendar = () => {
                 value={selectedDate}
                 onChange={(newValue) => setSelectedDate(newValue)}
                 orientation={isMobile ? "portrait" : "landscape"}
-                slotProps={{
-                  actionBar: {
-                    actions: ["clear", "today", "accept"],
-                  },
-                }}
                 sx={{
                   width: "100%", // Ocupa a largura total da seção
                   "& .MuiPickersLayout-root": {
