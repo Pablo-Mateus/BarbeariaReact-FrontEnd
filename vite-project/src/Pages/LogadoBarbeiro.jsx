@@ -63,17 +63,12 @@ const Logado = () => {
 
   // Função para lidar com o clique no botão "Agendar" de cada serviço
   const handleAgendarClick = (serviceTitle, serviceTime) => {
-    // Redireciona para a página de agendamento com os parâmetros do serviço
-    navigate(
-      `/agendar?servico=${encodeURIComponent(
-        serviceTitle
-      )}&tempo=${serviceTime}`
-    );
+   
   };
 
   return (
     <>
-      {/* Cabeçalho */}
+
       <header className={`${global.container} ${header.headerMenu}`}>
         <div className={global.imagemLogo}>
           <NavLink to="/logadoBarbeiro" end>
@@ -132,7 +127,7 @@ const Logado = () => {
                     handleAgendarClick(service.title, service.time)
                   }
                 >
-                  Agendar
+                  Alterar valor ou duração
                 </button>
               </div>
             ))}

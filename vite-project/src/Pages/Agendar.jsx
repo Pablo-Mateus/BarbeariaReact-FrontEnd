@@ -131,6 +131,7 @@ const Agendar = () => {
     };
 
     fetchTimes();
+    console.log(selectedDate)
   }, [selectedDate]); // Re-executa quando a data selecionada muda
 
   // Função para lidar com o envio do agendamento
@@ -150,7 +151,7 @@ const Agendar = () => {
       servico: servicoParam,
       hora: Number(tempoServicoParam), // Duração do serviço (certifique-se de que é um número)
       diaSemana: diasSemana[selectedDate.format("ddd")],
-      date: selectedDate.format("YYYY-MM-DD"),
+      date: selectedDate.$d,
     };
     console.log(agendamentoData);
     try {
