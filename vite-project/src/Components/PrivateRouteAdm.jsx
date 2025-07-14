@@ -8,7 +8,7 @@ const getToken = () => {
 
 const PrivateRoute = () => {
   const [isAuthenticated, setisAuthenticated] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true); // <-- Começa como TRUE, o que é correto!
+  const [isLoading, setIsLoading] = React.useState(true); 
   const navigate = useNavigate();
   React.useEffect(() => {
     const checkAuth = async () => {

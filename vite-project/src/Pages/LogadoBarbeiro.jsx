@@ -83,7 +83,7 @@ const Logado = () => {
         <nav className={`${header.menuBarber}`}>
           <ul>
             <li>
-              <NavLink className={`${header.NavLink}`} to="/Agendamentos">
+              <NavLink className={`${header.NavLink}`} to="/Clientes">
                 Clientes
               </NavLink>
             </li>

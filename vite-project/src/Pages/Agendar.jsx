@@ -83,6 +83,7 @@ const Agendar = () => {
       setSelectedTime(null); // Limpa seleção de horário
 
       const diaFormatado = diasSemana[selectedDate.format("ddd")];
+
       if (!diaFormatado) {
         setSnackbar({
           open: true,
@@ -149,9 +150,9 @@ const Agendar = () => {
       servico: servicoParam,
       hora: Number(tempoServicoParam), // Duração do serviço (certifique-se de que é um número)
       diaSemana: diasSemana[selectedDate.format("ddd")],
-      // O intervalo não é mais necessário aqui, pois o backend calcula os slots
+      date: selectedDate.format("YYYY-MM-DD"),
     };
-
+    console.log(agendamentoData);
     try {
       const response = await fetch("http://localhost:5000/createSchedule", {
         method: "POST",
