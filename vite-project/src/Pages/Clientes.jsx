@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import agendamentos from "../styles/Agendamentos.module.css";
 import Footer from "../utilitarios/Footer";
 
-const Agendamentos = () => {
+const Clientes = () => {
   const token = localStorage.getItem("token");
   const [agendamentosList, setAgendamentosList] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState("all"); // 'all', 'Pendente', 'Aceito', 'Cancelado'
@@ -23,7 +23,6 @@ const Agendamentos = () => {
         });
         const data = await request.json();
 
-        // O backend agora retorna 'usuario' para ambos os casos
         if (request.ok && data.usuario) {
           setAgendamentosList(data.usuario);
         } else {
@@ -84,6 +83,10 @@ const Agendamentos = () => {
     if (filterStatus === "Cancelado") {
       return agendamento.status.includes("Cancelado");
     }
+    if (filterStatus === "Pendente") {
+      return agendamento.status.includes("Aguardando aceite");
+    }
+
     return agendamento.status === filterStatus;
   });
 
@@ -207,4 +210,4 @@ const Agendamentos = () => {
   );
 };
 
-export default Agendamentos;
+export default Clientes;

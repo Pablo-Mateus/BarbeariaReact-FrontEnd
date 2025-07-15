@@ -10,7 +10,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker"; // Mantive DatePick
 import agendar from "../styles/Agendar.module.css";
 import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { CircularProgress, Snackbar, Alert } from "@mui/material"; // Para loading e feedback
+import { CircularProgress, Snackbar, Alert, Button } from "@mui/material"; // Para loading e feedback
 import agendamentos from "../styles/Agendamentos.module.css";
 
 // Cores base para o tema, importadas ou definidas aqui
@@ -48,7 +48,8 @@ const Agendar = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [availableTimes, setAvailableTimes] = useState([]); // Horários disponíveis
   const [selectedTime, setSelectedTime] = useState(null); // Horário selecionado pelo usuário
-  const [loading, setLoading] = useState(false); // Estado de carregamento
+  const [loading, setLoading] = useState(false);
+  const [carregando, setCarregando] = useState(true);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -167,12 +168,13 @@ const Agendar = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // setSnackbar({
-        //   open: true,
-        //   message: data.message,
-        //   severity: "success",
-        // });
-        return <NavLink to="/agendamentos">Ir para seus agendamentos!</NavLink>;
+        setSnackbar({
+          open: true,
+          message: data.message,
+          severity: "success",
+        });
+        setLoading(false);
+        setCarregando(false);
       } else {
         setSnackbar({
           open: true,
@@ -191,12 +193,6 @@ const Agendar = () => {
       setLoading(false);
     }
   }
-
-  // Função para limpar o token e recarregar a página (sair)
-  const clearLocal = useCallback(() => {
-    localStorage.removeItem("token");
-    window.location.reload();
-  }, []);
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -286,7 +282,7 @@ const Agendar = () => {
               {/* Time Slots Section */}
               <div className={agendar.timeSlotsSection}>
                 <h2 className={agendar.timeSlotsTitle}>
-                  Horários Disponíveis para {selectedDate.format("DD/MM")}
+                  Horários disponíveis para {selectedDate.format("DD/MM/YYYY")}
                 </h2>
                 {loading ? (
                   <div className={agendar.loadingContainer}>
@@ -315,19 +311,26 @@ const Agendar = () => {
                   </p>
                 )}
 
-                {availableTimes.length > 0 && (
-                  <button
-                    className={`${agendar.submitButton}`}
-                    onClick={handleSubmit}
-                    disabled={loading || !selectedTime}
-                  >
-                    {loading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : (
-                      "Agendar Agora"
-                    )}
-                  </button>
-                )}
+                {availableTimes.length > 0 &&
+                  (carregando ? (
+                    <button
+                      className={`${agendar.submitButton}`}
+                      onClick={handleSubmit}
+                      disabled={loading || !selectedTime}
+                    >
+                      {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        "Agendar Agora"
+                      )}
+                    </button>
+                  ) : (
+                    <button  className={`${agendar.submitButton}`}>
+                      <NavLink to="/Agendamentos">
+                        Ir para meus agendamentos
+                      </NavLink>
+                    </button>
+                  ))}
               </div>
             </StyledSchedulerContainer>
           </LocalizationProvider>

@@ -5,16 +5,24 @@ import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
 import { NavLink } from "react-router-dom";
 import agendamentos from "../styles/Agendamentos.module.css";
 import Footer from "../utilitarios/Footer";
-
+import { CircularProgress, Snackbar, Alert, Button } from "@mui/material";
 const Agendamentos = () => {
   const token = localStorage.getItem("token");
   const [agendamentosList, setAgendamentosList] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState("all"); // 'all', 'Pendente', 'Aceito', 'Cancelado'
 
-  // Função para limpar o token e recarregar a página (sair)
-  function clearLocal() {
-    localStorage.removeItem("token");
-    window.location.reload();
+  async function clearSchedule() {
+    const response = await fetch("http://localhost:5000/deleteSchedule", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      window.alert("Horários deletados com sucesso!");
+      window.location.reload();
+    }
   }
 
   // Efeito para carregar os agendamentos ao montar o componente
@@ -90,14 +98,17 @@ const Agendamentos = () => {
     if (filterStatus === "Cancelado") {
       return agendamento.status.includes("Cancelado");
     }
+
+    if (filterStatus === "Pendente") {
+      return agendamento.status.includes("Aguardando aceite");
+    }
     return agendamento.status === filterStatus;
   });
 
   return (
     <div className={agendamentos.pageWrapper}>
-    
       <main className={agendamentos.mainContent}>
-        <h1>Meus Agendamentos</h1>
+        <h1>Agendados</h1>
 
         <div className={agendamentos.filterButtons}>
           <button
@@ -132,6 +143,13 @@ const Agendamentos = () => {
           >
             Cancelados
           </button>
+          <button
+            style={{ marginLeft: "10px" }}
+            className={`${agendamentos.filterButton}`}
+            onClick={clearSchedule}
+          >
+            Limpar
+          </button>
         </div>
 
         {filteredAgendamentos.length > 0 ? (
@@ -155,6 +173,12 @@ const Agendamentos = () => {
                         agendamento.servico.slice(1)}
                     </span>
                   </h3>
+                  <p>Nome:
+                    <span>
+                      {agendamento.nome.charAt(0).toUpperCase() +
+                        agendamento.nome.slice(1)}
+                    </span>
+                  </p>
                   <p>
                     Data:{" "}
                     <span>
@@ -210,7 +234,6 @@ const Agendamentos = () => {
           </p>
         )}
       </main>
-
     </div>
   );
 };

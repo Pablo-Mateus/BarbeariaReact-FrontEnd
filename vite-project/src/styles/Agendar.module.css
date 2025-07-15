@@ -153,6 +153,11 @@
   gap: 10px; /* Espaçamento para o spinner */
 }
 
+.submitButton a {
+  text-decoration: none;
+  color : #fff;
+}
+
 .submitButton:hover {
   background: linear-gradient(135deg, #2a5298, #1e3c72);
   transform: translateY(-2px);
