@@ -211,29 +211,7 @@ const DefinirHorario = () => {
   // --- JSX de Renderização ---
   return (
     <>
-      <header className={`${global.container}`}>
-        <div className={`${header.headerMenu}`}>
-          <div className={global.imagemLogo}>
-            <NavLink to="/logadoBarbeiro" end>
-              <img src={logo} alt="Logo Barbearia" />
-            </NavLink>
-          </div>
-          <div className={`${header.menuBarber}`}>
-            <ul>
-              <li>
-                <NavLink className={`${header.NavLink}`} to="/Agendamentos">
-                  Clientes
-                </NavLink>
-              </li>
-              <li>
-                <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                  Sair
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </header>
+   
       <StyledMainContent>
         <Typography variant="h1" component="h1" sx={{ fontSize: '2.5rem', color: PRIMARY_BLUE, textAlign: 'center', marginBottom: '20px' }}>
           Selecione os horários para a semana

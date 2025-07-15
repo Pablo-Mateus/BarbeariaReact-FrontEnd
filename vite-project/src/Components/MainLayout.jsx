@@ -12,6 +12,11 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const token = getToken();
 
+  const publicNavLinks = [
+    { to: "/Login", text: "Login" },
+    { to: "/Register", text: "Register" },
+  ];
+
   if (token) {
     const checkAuth = async () => {
       const response = await fetch("http://localhost:5000/check-auth", {
@@ -35,9 +40,14 @@ const MainLayout = () => {
   return (
     <>
       <div className={`${global.pai}`}>
-
+        <Header
+          headerType="Public"
+          logoRedirectPath="/"
+          navLinks={publicNavLinks}
+          onLogout={null}
+        />
         <Outlet />
-      
+        <Footer />
       </div>
     </>
   );

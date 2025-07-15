@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Footer from "../utilitarios/Footer";
+import Header from "../utilitarios/Header";
 const getToken = () => {
   const token = localStorage.getItem("token");
   return token;
@@ -8,8 +9,10 @@ const getToken = () => {
 
 const PrivateRoute = () => {
   const [isAuthenticated, setisAuthenticated] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true); 
+  const [isLoading, setIsLoading] = React.useState(true);
   const navigate = useNavigate();
+  const publicNavLinks = [{ to: "/Clientes", text: "Clientes" }, { to: "/DefinirHorario", text: "Horários" }];
+
   React.useEffect(() => {
     const checkAuth = async () => {
       const token = getToken();
@@ -59,6 +62,12 @@ const PrivateRoute = () => {
   // Se não estiver mais carregando, decide o que renderizar
   return isAuthenticated ? (
     <>
+      <Header
+        headerType="Public"
+        logoRedirectPath="/"
+        navLinks={publicNavLinks}
+        onLogout={true}
+      />
       <Outlet />
       <Footer />
     </>

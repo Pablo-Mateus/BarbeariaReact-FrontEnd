@@ -62,48 +62,25 @@ const Logado = () => {
   }
 
   // Função para lidar com o clique no botão "Agendar" de cada serviço
-  const handleAgendarClick = (serviceTitle, serviceTime) => {
-   
-  };
+  const handleAgendarClick = (serviceTitle, serviceTime) => {};
 
   return (
     <>
-
-      <header className={`${global.container} ${header.headerMenu}`}>
-        <div className={global.imagemLogo}>
-          <NavLink to="/logadoBarbeiro" end>
-            <img src={logo} alt="Logo Barbearia" />
-          </NavLink>
-        </div>
-        <nav className={`${header.menuBarber}`}>
-          <ul>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/Clientes">
-                Clientes
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/DefinirHorario">
-                Horários
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                Sair
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
-
-      {/* Conteúdo Principal - Reutilizando estilos da HomePage */}
+      <form action="">
+        <h1>Criar serviços</h1>
+        <label htmlFor="servico">Serviço:</label>
+        <input type="text" placeholder="Ex: corte de cabelo" id="servico" />
+        <label htmlFor="descricao">Descrição do serviço:</label>
+        <input type="text" id="descricao" />
+        <label htmlFor="preco">Preço:</label>
+        <input type="number" id="preco" placeholder="R$00,00" />
+         <label htmlFor="duracao">Duração:</label>
+        <input type="number" id="duracao" placeholder="Em minutos ex: 45" />
+      </form>
       <main className={`${appStyles.heroSection} ${appStyles.bgServicos}`}>
-        {" "}
-        {/* Mantém a imagem de fundo e estilo de "hero" */}
         <section className={`${global.container} ${appStyles.servicosContent}`}>
           <div className={appStyles.introText}>
             <h1>Bem-vindo!</h1>{" "}
-            {/* Mensagem de boas-vindas para o usuário logado */}
             <p>Escolha um serviço e agende seu horário com facilidade.</p>
           </div>
 
@@ -134,8 +111,6 @@ const Logado = () => {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 };

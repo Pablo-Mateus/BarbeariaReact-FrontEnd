@@ -5,7 +5,7 @@
   --primary-blue-dark: #1e3c72;
   --primary-blue-light: #2a5298;
   --accent-gold: #ffc107; /* Um dourado vibrante */
-  --text-dark: #333;
+  --text-dark: #080808;
   --text-light: #f9f9f9;
   --bg-light: #f4f7fc;
   --card-bg: #ffffff;
@@ -13,32 +13,13 @@
   --shadow-medium: rgba(0, 0, 0, 0.15);
 }
 
-/* Hero Section / Banner Inicial */
 .heroSection {
-  background-image: url('../assets/barber-shop-bg.jpg'); /* Adicione uma imagem de fundo atraente */
-  background-size: cover;
-  background-position: center;
-  color: var(--text-light);
+  color: var(--text-dark);
   text-align: center;
-  padding: 80px 20px; /* Mais padding para destaque */
-  display: flex;
-  flex-direction: column;
+  padding: 80px 20px;
   justify-content: center;
   align-items: center;
-  min-height: 400px; /* Altura mínima para o banner */
   position: relative;
-}
-
-/* Overlay para escurecer a imagem de fundo e melhorar a legibilidade */
-.heroSection::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Escurece a imagem */
-  z-index: 1;
 }
 
 .servicosContent {
@@ -49,26 +30,28 @@
 }
 
 .introText h1 {
-  font-family: 'Montserrat', sans-serif; /* Fonte mais moderna */
+  font-family: "Montserrat", sans-serif; /* Fonte mais moderna */
   font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 15px;
   line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para o texto do título */
 }
 
 .introText p {
-  font-family: 'Open Sans', sans-serif; /* Fonte legível para o parágrafo */
+  font-family: "Open Sans", sans-serif; /* Fonte legível para o parágrafo */
   font-size: 1.3rem;
   max-width: 700px;
+  font-weight: bold;
   margin: 0 auto 50px; /* Espaço maior antes dos cards */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 /* Grid de Serviços */
 .servicesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Layout responsivo de grid */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  ); /* Layout responsivo de grid */
   gap: 30px; /* Espaçamento entre os cards */
   padding: 20px;
 }
@@ -91,7 +74,7 @@
 }
 
 .serviceCard h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 1.8rem;
   color: var(--primary-blue-light);
   margin-bottom: 15px;
@@ -99,7 +82,7 @@
 }
 
 .serviceCard p {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 1.05rem;
   color: var(--text-dark);
   margin-bottom: 25px;
@@ -118,7 +101,7 @@
 }
 
 .priceDuration h3 {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1.15rem;
   color: var(--text-dark);
   font-weight: 600;
@@ -132,7 +115,11 @@
 
 /* Botão de Agendar */
 .agendarButton {
-  background: linear-gradient(135deg, var(--primary-blue-dark), var(--primary-blue-light));
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue-dark),
+    var(--primary-blue-light)
+  );
   color: var(--text-light);
   padding: 12px 25px;
   border: none;
@@ -146,7 +133,11 @@
 }
 
 .agendarButton:hover {
-  background: linear-gradient(135deg, var(--primary-blue-light), var(--primary-blue-dark));
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue-light),
+    var(--primary-blue-dark)
+  );
   transform: translateY(-3px);
   box-shadow: 0 6px 15px rgba(42, 82, 152, 0.4);
 }

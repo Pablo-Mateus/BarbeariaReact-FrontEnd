@@ -70,7 +70,11 @@ const Login = () => {
     }
 
     setIsLoading(true); // Ativa o spinner para a solicitação de redefinição
-    setSnackbar({ open: true, message: "Enviando e-mail de redefinição...", severity: "info" });
+    setSnackbar({
+      open: true,
+      message: "Enviando e-mail de redefinição...",
+      severity: "info",
+    });
 
     try {
       const response = await fetch("http://localhost:5000/resetPassword", {
@@ -85,7 +89,8 @@ const Login = () => {
       if (response.ok) {
         setSnackbar({
           open: true,
-          message: data.message || "Link de redefinição enviado para o seu e-mail!",
+          message:
+            data.message || "Link de redefinição enviado para o seu e-mail!",
           severity: "success",
         });
       } else {
@@ -171,16 +176,21 @@ const Login = () => {
 
   return (
     <>
-      <Header />
-      <main className={formStyles.registerPageContainer}> {/* Reutiliza o container geral de formulário */}
+      <main className={formStyles.registerPageContainer}>
+        {" "}
+        {/* Reutiliza o container geral de formulário */}
         <h1 className={formStyles.title}>LOGIN</h1>
-        <form className={formStyles.form} onSubmit={handleAuth}> {/* Reutiliza o estilo de formulário */}
+        <form className={formStyles.form} onSubmit={handleAuth}>
+          {" "}
+          {/* Reutiliza o estilo de formulário */}
           <div className={formStyles.formGroup}>
             <label htmlFor="email" className={formStyles.label}>
               Email
             </label>
             <input
-              className={`${formStyles.input} ${formErrors.email ? formStyles.inputError : ""}`}
+              className={`${formStyles.input} ${
+                formErrors.email ? formStyles.inputError : ""
+              }`}
               type="email"
               id="email"
               name="email"
@@ -188,15 +198,20 @@ const Login = () => {
               value={email}
               onChange={handleEmailChange}
             />
-            {formErrors.email && <span className={formStyles.errorMessage}>{formErrors.email}</span>}
+            {formErrors.email && (
+              <span className={formStyles.errorMessage}>
+                {formErrors.email}
+              </span>
+            )}
           </div>
-
           <div className={formStyles.formGroup}>
             <label htmlFor="password" className={formStyles.label}>
               Senha
             </label>
             <input
-              className={`${formStyles.input} ${formErrors.senha ? formStyles.inputError : ""}`}
+              className={`${formStyles.input} ${
+                formErrors.senha ? formStyles.inputError : ""
+              }`}
               type="password"
               id="password"
               name="password"
@@ -204,23 +219,37 @@ const Login = () => {
               value={senha}
               onChange={handleSenhaChange}
             />
-            {formErrors.senha && <span className={formStyles.errorMessage}>{formErrors.senha}</span>}
+            {formErrors.senha && (
+              <span className={formStyles.errorMessage}>
+                {formErrors.senha}
+              </span>
+            )}
           </div>
-
-          <NavLink className={formStyles.forgotPasswordLink} onClick={forgotPass}>
+          <NavLink
+            className={formStyles.forgotPasswordLink}
+            onClick={forgotPass}
+          >
             Esqueci minha senha
           </NavLink>
-
-          <button type="submit" className={formStyles.submitButton} disabled={isLoading}>
-            {isLoading ? <CircularProgress size={24} color="inherit" /> : "Entrar"}
+          <button
+            type="submit"
+            className={formStyles.submitButton}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Entrar"
+            )}
           </button>
-
           <div className={formStyles.registerPrompt}>
-            Não tem uma conta? <NavLink to="/register" className={formStyles.registerLink}>Crie uma agora!</NavLink>
+            Não tem uma conta?{" "}
+            <NavLink to="/register" className={formStyles.registerLink}>
+              Crie uma agora!
+            </NavLink>
           </div>
         </form>
       </main>
-      <Footer />
 
       <Snackbar
         open={snackbar.open}

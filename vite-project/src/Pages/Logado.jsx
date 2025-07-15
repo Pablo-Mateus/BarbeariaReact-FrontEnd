@@ -73,30 +73,7 @@ const Logado = () => {
 
   return (
     <>
-      {/* Cabeçalho */}
-      <header className={`${global.container} ${header.headerMenu}`}>
-        <div className={global.imagemLogo}>
-          <NavLink to="/logado" end>
-            <img src={logo} alt="Logo Barbearia" />
-          </NavLink>
-        </div>
-        <nav className={`${header.menuBarber}`}>
-          <ul>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/Agendamentos">
-                Meus Agendamentos
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                Sair
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
-
-      {/* Conteúdo Principal - Reutilizando estilos da HomePage */}
+    
       <main className={`${appStyles.heroSection} ${appStyles.bgServicos}`}>
         {" "}
         {/* Mantém a imagem de fundo e estilo de "hero" */}
@@ -135,7 +112,6 @@ const Logado = () => {
         </section>
       </main>
 
-      <Footer />
     </>
   );
 };

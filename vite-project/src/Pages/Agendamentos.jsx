@@ -95,27 +95,7 @@ const Agendamentos = () => {
 
   return (
     <div className={agendamentos.pageWrapper}>
-      <header className={`${global.container} ${header.headerMenu}`}>
-        <div className={global.imagemLogo}>
-          <NavLink to="/logado" end>
-            <img src={logo} alt="Logo Barbearia" />
-          </NavLink>
-        </div>
-        <nav className={`${header.menuBarber}`}>
-          <ul>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/agendamentos">
-                Meus Agendamentos
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                Sair
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
+    
       <main className={agendamentos.mainContent}>
         <h1>Meus Agendamentos</h1>
 
@@ -230,7 +210,7 @@ const Agendamentos = () => {
           </p>
         )}
       </main>
-      <Footer />
+
     </div>
   );
 };

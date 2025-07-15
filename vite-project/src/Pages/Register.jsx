@@ -47,15 +47,18 @@ const Register = () => {
   const validatePhone = (value) => {
     const digits = value.replace(/\D/g, "");
     if (!value) return "Telefone é obrigatório.";
-    if (digits.length < 10) return "Número de telefone incompleto (mín. 10 dígitos).";
+    if (digits.length < 10)
+      return "Número de telefone incompleto (mín. 10 dígitos).";
     return "";
   };
 
   // Função de validação de senha
   const validatePassword = (value) => {
     if (!value) return "Senha é obrigatória.";
-    if (value.length < 10) return "A senha deve conter no mínimo 10 caracteres.";
-    if (!/[!@#$%&*]/.test(value)) return "A senha deve conter pelo menos um caractere especial (!@#$%&*).";
+    if (value.length < 10)
+      return "A senha deve conter no mínimo 10 caracteres.";
+    if (!/[!@#$%&*]/.test(value))
+      return "A senha deve conter pelo menos um caractere especial (!@#$%&*).";
     return "";
   };
 
@@ -78,7 +81,10 @@ const Register = () => {
     const value = e.target.value;
     const maskedValue = applyPhoneMask(value);
     setTelefone(maskedValue);
-    setFormErrors((prev) => ({ ...prev, telefone: validatePhone(maskedValue) }));
+    setFormErrors((prev) => ({
+      ...prev,
+      telefone: validatePhone(maskedValue),
+    }));
   };
 
   // Handler para input de senha
@@ -87,14 +93,20 @@ const Register = () => {
     setSenha(value);
     setFormErrors((prev) => ({ ...prev, senha: validatePassword(value) }));
     // Revalida a confirmação de senha se a senha mudar
-    setFormErrors((prev) => ({ ...prev, confirmarSenha: validateConfirmPassword(confirmarSenha) }));
+    setFormErrors((prev) => ({
+      ...prev,
+      confirmarSenha: validateConfirmPassword(confirmarSenha),
+    }));
   };
 
   // Handler para input de confirmação de senha
   const handleConfirmarSenhaChange = (e) => {
     const value = e.target.value;
     setConfirmarSenha(value);
-    setFormErrors((prev) => ({ ...prev, confirmarSenha: validateConfirmPassword(value) }));
+    setFormErrors((prev) => ({
+      ...prev,
+      confirmarSenha: validateConfirmPassword(value),
+    }));
   };
 
   // Validação geral do formulário antes do submit
@@ -132,7 +144,13 @@ const Register = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ nome, email, telefone, senha, confirmarsenha: confirmarSenha }),
+        body: JSON.stringify({
+          nome,
+          email,
+          telefone,
+          senha,
+          confirmarsenha: confirmarSenha,
+        }),
       });
       const data = await response.json();
 
@@ -174,8 +192,9 @@ const Register = () => {
 
   return (
     <>
-      <Header />
-      <main className={register.registerPageContainer}> {/* Novo container para a página */}
+      <main className={register.registerPageContainer}>
+        {" "}
+        {/* Novo container para a página */}
         <h1 className={register.title}>CRIE SUA CONTA</h1>
         <form className={register.form} onSubmit={handleSubmit}>
           <div className={register.formGroup}>
@@ -183,7 +202,9 @@ const Register = () => {
               Nome de usuário
             </label>
             <input
-              className={`${register.input} ${formErrors.nome ? register.inputError : ""}`}
+              className={`${register.input} ${
+                formErrors.nome ? register.inputError : ""
+              }`}
               type="text"
               id="name"
               name="name"
@@ -191,10 +212,15 @@ const Register = () => {
               value={nome}
               onChange={({ target }) => {
                 setNome(target.value);
-                setFormErrors((prev) => ({ ...prev, nome: !target.value ? "Nome é obrigatório." : "" }));
+                setFormErrors((prev) => ({
+                  ...prev,
+                  nome: !target.value ? "Nome é obrigatório." : "",
+                }));
               }}
             />
-            {formErrors.nome && <span className={register.errorMessage}>{formErrors.nome}</span>}
+            {formErrors.nome && (
+              <span className={register.errorMessage}>{formErrors.nome}</span>
+            )}
           </div>
 
           <div className={register.formGroup}>
@@ -202,7 +228,9 @@ const Register = () => {
               Email
             </label>
             <input
-              className={`${register.input} ${formErrors.email ? register.inputError : ""}`}
+              className={`${register.input} ${
+                formErrors.email ? register.inputError : ""
+              }`}
               type="email"
               id="email"
               name="email"
@@ -210,7 +238,9 @@ const Register = () => {
               value={email}
               onChange={handleEmailChange}
             />
-            {formErrors.email && <span className={register.errorMessage}>{formErrors.email}</span>}
+            {formErrors.email && (
+              <span className={register.errorMessage}>{formErrors.email}</span>
+            )}
           </div>
 
           <div className={register.formGroup}>
@@ -218,8 +248,10 @@ const Register = () => {
               Telefone
             </label>
             <input
-              className={`${register.input} ${formErrors.telefone ? register.inputError : ""}`}
-              type="tel" 
+              className={`${register.input} ${
+                formErrors.telefone ? register.inputError : ""
+              }`}
+              type="tel"
               id="telefone"
               name="telefone"
               placeholder="(XX) XXXXX-XXXX"
@@ -227,7 +259,11 @@ const Register = () => {
               value={telefone}
               onChange={handleTelefoneChange}
             />
-            {formErrors.telefone && <span className={register.errorMessage}>{formErrors.telefone}</span>}
+            {formErrors.telefone && (
+              <span className={register.errorMessage}>
+                {formErrors.telefone}
+              </span>
+            )}
           </div>
 
           <div className={register.formGroup}>
@@ -235,7 +271,9 @@ const Register = () => {
               Senha
             </label>
             <input
-              className={`${register.input} ${formErrors.senha ? register.inputError : ""}`}
+              className={`${register.input} ${
+                formErrors.senha ? register.inputError : ""
+              }`}
               type="password"
               id="senha"
               name="senha"
@@ -243,7 +281,9 @@ const Register = () => {
               value={senha}
               onChange={handleSenhaChange}
             />
-            {formErrors.senha && <span className={register.errorMessage}>{formErrors.senha}</span>}
+            {formErrors.senha && (
+              <span className={register.errorMessage}>{formErrors.senha}</span>
+            )}
           </div>
 
           <div className={register.formGroup}>
@@ -251,7 +291,9 @@ const Register = () => {
               Confirmar Senha
             </label>
             <input
-              className={`${register.input} ${formErrors.confirmarSenha ? register.inputError : ""}`}
+              className={`${register.input} ${
+                formErrors.confirmarSenha ? register.inputError : ""
+              }`}
               type="password"
               id="confirmarSenha"
               name="confirmarSenha"
@@ -259,20 +301,33 @@ const Register = () => {
               value={confirmarSenha}
               onChange={handleConfirmarSenhaChange}
             />
-            {formErrors.confirmarSenha && <span className={register.errorMessage}>{formErrors.confirmarSenha}</span>}
+            {formErrors.confirmarSenha && (
+              <span className={register.errorMessage}>
+                {formErrors.confirmarSenha}
+              </span>
+            )}
           </div>
 
           <ul className={register.passwordRequirements}>
             <li>A senha deve conter no mínimo 10 dígitos.</li>
-            <li>A senha deve conter pelo menos um caractere especial (!@#$%&*).</li>
+            <li>
+              A senha deve conter pelo menos um caractere especial (!@#$%&*).
+            </li>
           </ul>
 
-          <button className={register.submitButton} type="submit" disabled={isLoading}>
-            {isLoading ? <CircularProgress size={24} color="inherit" /> : "Registrar-se"}
+          <button
+            className={register.submitButton}
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Registrar-se"
+            )}
           </button>
         </form>
       </main>
-      <Footer />
 
       <Snackbar
         open={snackbar.open}

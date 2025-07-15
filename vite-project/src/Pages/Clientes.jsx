@@ -11,12 +11,6 @@ const Agendamentos = () => {
   const [agendamentosList, setAgendamentosList] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState("all"); // 'all', 'Pendente', 'Aceito', 'Cancelado'
 
-  // Função para limpar o token e recarregar a página (sair)
-  function clearLocal() {
-    localStorage.removeItem("token");
-    window.location.reload();
-  }
-
   // Efeito para carregar os agendamentos ao montar o componente
   React.useEffect(() => {
     const fetchSchedules = async () => {
@@ -95,27 +89,6 @@ const Agendamentos = () => {
 
   return (
     <div className={agendamentos.pageWrapper}>
-      <header className={`${global.container} ${header.headerMenu}`}>
-        <div className={global.imagemLogo}>
-          <NavLink to="/logado" end>
-            <img src={logo} alt="Logo Barbearia" />
-          </NavLink>
-        </div>
-        <nav className={`${header.menuBarber}`}>
-          <ul>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/agendamentos">
-                Meus Agendamentos
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                Sair
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
       <main className={agendamentos.mainContent}>
         <h1>Meus Agendamentos</h1>
 
@@ -230,7 +203,6 @@ const Agendamentos = () => {
           </p>
         )}
       </main>
-      <Footer />
     </div>
   );
 };

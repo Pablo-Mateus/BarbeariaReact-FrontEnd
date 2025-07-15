@@ -4,34 +4,40 @@ import header from "../styles/Header.module.css";
 import global from "../styles/Global.module.css";
 import { NavLink } from "react-router-dom";
 
-const Header = () => {
-  if (window.location.href === "http://localhost:5173/logado") {
-    return null;
-  } // Usuário logado tem um header diferente.
+const Header = ({ headerType, logoRedirectPath = "/", navLinks, onLogout }) => {
+  function handleLogout() {
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
+
   return (
-    <header className={`${global.container}`}>
-      <div className={`${header.headerMenu}`}>
+    <>
+      <header className={`${global.container} ${header.headerMenu}`}>
         <div className={global.imagemLogo}>
-          <NavLink to="/" end>
+          <NavLink to={logoRedirectPath} end>
             <img src={logo} alt="Logo Barbearia" />
           </NavLink>
         </div>
         <div className={`${header.menuBarber}`}>
           <ul>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/Register">
-                Inscreva-se
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/login">
-                Login
-              </NavLink>
-            </li>
+            {navLinks.map((link, index) => (
+              <li key={index}>
+                <NavLink className={`${header.NavLink}`} to={link.to}>
+                  {link.text}
+                </NavLink>
+              </li>
+            ))}
+            {onLogout && ( // Renderiza o botão Sair apenas se a prop onLogout for fornecida
+              <li>
+                <NavLink className={`${header.NavLink}`} onClick={handleLogout}>
+                  Sair
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 

@@ -11,6 +11,7 @@ import agendar from "../styles/Agendar.module.css";
 import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { CircularProgress, Snackbar, Alert } from "@mui/material"; // Para loading e feedback
+import agendamentos from "../styles/Agendamentos.module.css";
 
 // Cores base para o tema, importadas ou definidas aqui
 const PRIMARY_BLUE = "#212F3D";
@@ -131,7 +132,7 @@ const Agendar = () => {
     };
 
     fetchTimes();
-    console.log(selectedDate)
+    console.log(selectedDate);
   }, [selectedDate]); // Re-executa quando a data selecionada muda
 
   // Função para lidar com o envio do agendamento
@@ -206,170 +207,147 @@ const Agendar = () => {
 
   return (
     <>
-      <header className={`${global.container} ${header.headerMenu}`}>
-        <div className={global.imagemLogo}>
-          <NavLink to="/logado" end>
-            {" "}
-            {/* Mudei para /logado, pois / já é a landing page */}
-            <img src={logo} alt="Logo Barbearia" />
-          </NavLink>
-        </div>
-        <nav className={`${header.menuBarber}`}>
-          <ul>
-            <li>
-              <NavLink className={`${header.NavLink}`} to="/agendamentos">
-                Meus Agendamentos
-              </NavLink>
-            </li>
-            <li>
-              <NavLink className={`${header.NavLink}`} onClick={clearLocal}>
-                Sair
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <div className={agendamentos.pageWrapper}>
+        <main className={agendar.mainContent}>
+          <h1 className={agendar.title}>Agende seu Horário</h1>
+          <p className={agendar.subtitle}>
+            Serviço: <strong>{servicoParam || "N/A"}</strong> | Duração:{" "}
+            <strong>
+              {tempoServicoParam ? `${tempoServicoParam} minutos` : "N/A"}
+            </strong>
+          </p>
 
-      <main className={agendar.mainContent}>
-        <h1 className={agendar.title}>Agende seu Horário</h1>
-        <p className={agendar.subtitle}>
-          Serviço: <strong>{servicoParam || "N/A"}</strong> | Duração:{" "}
-          <strong>
-            {tempoServicoParam ? `${tempoServicoParam} minutos` : "N/A"}
-          </strong>
-        </p>
-
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          localeText={{
-            okButtonLabel: "Confirmar",
-            cancelButtonLabel: "Cancelar",
-          }}
-        >
-          <StyledSchedulerContainer>
-            {/* Calendar Section */}
-            <div className={agendar.calendarSection}>
-              <DatePicker
-                value={selectedDate}
-                onChange={(newValue) => setSelectedDate(newValue)}
-                orientation={isMobile ? "portrait" : "landscape"}
-                sx={{
-                  width: "100%", // Ocupa a largura total da seção
-                  "& .MuiPickersLayout-root": {
-                    flexDirection: isMobile ? "column" : "row",
-                    alignItems: "stretch",
-                  },
-                  "& .MuiPickersLayout-contentWrapper": {
-                    padding: isMobile ? "10px" : "16px", // Ajusta padding interno
-                    minWidth: isMobile ? "100%" : "300px", // Garante largura mínima
-                  },
-                  "& .MuiPickersCalendarHeader-root": {
-                    // Estilos para o cabeçalho do calendário (Mês, Ano)
-                    backgroundColor: PRIMARY_BLUE, // Cor de fundo do cabeçalho
-                    color: TEXT_LIGHT, // Cor do texto do cabeçalho
-                    borderRadius: "8px 8px 0 0",
-                    padding: "10px 16px",
-                  },
-                  "& .MuiButtonBase-root": {
-                    // Botões de navegação do calendário e seleção de dia
-                    color: PRIMARY_BLUE, // Cor dos ícones de navegação
-                  },
-                  "& .MuiPickersDay-root.Mui-selected": {
-                    // Dia selecionado
-                    backgroundColor: `${PRIMARY_BLUE} !important`,
-                    color: TEXT_LIGHT,
-                    fontWeight: "bold",
-                    "&:hover": {
-                      backgroundColor: `${PRIMARY_BLUE} !important`,
-                      opacity: 0.9,
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            localeText={{
+              okButtonLabel: "Confirmar",
+              cancelButtonLabel: "Cancelar",
+            }}
+          >
+            <StyledSchedulerContainer>
+              {/* Calendar Section */}
+              <div className={agendar.calendarSection}>
+                <DatePicker
+                  value={selectedDate}
+                  onChange={(newValue) => setSelectedDate(newValue)}
+                  orientation={isMobile ? "portrait" : "landscape"}
+                  sx={{
+                    width: "100%", // Ocupa a largura total da seção
+                    "& .MuiPickersLayout-root": {
+                      flexDirection: isMobile ? "column" : "row",
+                      alignItems: "stretch",
                     },
-                  },
-                  "& .MuiPickersDay-today": {
-                    // Dia de hoje
-                    borderColor: `${ACCENT_GOLD} !important`,
-                    borderWidth: "2px",
-                  },
-                  // Estilos para as ações (OK, Cancelar, etc.)
-                  "& .MuiDialogActions-root": {
-                    padding: "16px",
-                    justifyContent: "space-around",
-                    "& .MuiButton-root": {
-                      backgroundColor: PRIMARY_BLUE,
+                    "& .MuiPickersLayout-contentWrapper": {
+                      padding: isMobile ? "10px" : "16px", // Ajusta padding interno
+                      minWidth: isMobile ? "100%" : "300px", // Garante largura mínima
+                    },
+                    "& .MuiPickersCalendarHeader-root": {
+                      // Estilos para o cabeçalho do calendário (Mês, Ano)
+                      backgroundColor: PRIMARY_BLUE, // Cor de fundo do cabeçalho
+                      color: TEXT_LIGHT, // Cor do texto do cabeçalho
+                      borderRadius: "8px 8px 0 0",
+                      padding: "10px 16px",
+                    },
+                    "& .MuiButtonBase-root": {
+                      // Botões de navegação do calendário e seleção de dia
+                      color: PRIMARY_BLUE, // Cor dos ícones de navegação
+                    },
+                    "& .MuiPickersDay-root.Mui-selected": {
+                      // Dia selecionado
+                      backgroundColor: `${PRIMARY_BLUE} !important`,
                       color: TEXT_LIGHT,
+                      fontWeight: "bold",
                       "&:hover": {
-                        backgroundColor: ACCENT_GOLD,
+                        backgroundColor: `${PRIMARY_BLUE} !important`,
+                        opacity: 0.9,
                       },
                     },
-                  },
-                }}
-              />
-            </div>
+                    "& .MuiPickersDay-today": {
+                      // Dia de hoje
+                      borderColor: `${ACCENT_GOLD} !important`,
+                      borderWidth: "2px",
+                    },
+                    // Estilos para as ações (OK, Cancelar, etc.)
+                    "& .MuiDialogActions-root": {
+                      padding: "16px",
+                      justifyContent: "space-around",
+                      "& .MuiButton-root": {
+                        backgroundColor: PRIMARY_BLUE,
+                        color: TEXT_LIGHT,
+                        "&:hover": {
+                          backgroundColor: ACCENT_GOLD,
+                        },
+                      },
+                    },
+                  }}
+                />
+              </div>
 
-            {/* Time Slots Section */}
-            <div className={agendar.timeSlotsSection}>
-              <h2 className={agendar.timeSlotsTitle}>
-                Horários Disponíveis para {selectedDate.format("DD/MM")}
-              </h2>
-              {loading ? (
-                <div className={agendar.loadingContainer}>
-                  <CircularProgress size={40} sx={{ color: PRIMARY_BLUE }} />
-                  <p>Carregando horários...</p>
-                </div>
-              ) : availableTimes.length > 0 ? (
-                <div className={agendar.timeButtonsContainer}>
-                  {availableTimes.map((time) => (
-                    <button
-                      key={time}
-                      className={`${agendar.timeButton} ${
-                        selectedTime === time ? agendar.selectedTime : ""
-                      }`}
-                      onClick={() => setSelectedTime(time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <p className={agendar.noTimesMessage}>
-                  Nenhum horário disponível para o dia selecionado.
-                  <br />
-                  Por favor, escolha outra data.
-                </p>
-              )}
+              {/* Time Slots Section */}
+              <div className={agendar.timeSlotsSection}>
+                <h2 className={agendar.timeSlotsTitle}>
+                  Horários Disponíveis para {selectedDate.format("DD/MM")}
+                </h2>
+                {loading ? (
+                  <div className={agendar.loadingContainer}>
+                    <CircularProgress size={40} sx={{ color: PRIMARY_BLUE }} />
+                    <p>Carregando horários...</p>
+                  </div>
+                ) : availableTimes.length > 0 ? (
+                  <div className={agendar.timeButtonsContainer}>
+                    {availableTimes.map((time) => (
+                      <button
+                        key={time}
+                        className={`${agendar.timeButton} ${
+                          selectedTime === time ? agendar.selectedTime : ""
+                        }`}
+                        onClick={() => setSelectedTime(time)}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={agendar.noTimesMessage}>
+                    Nenhum horário disponível para o dia selecionado.
+                    <br />
+                    Por favor, escolha outra data.
+                  </p>
+                )}
 
-              {availableTimes.length > 0 && (
-                <button
-                  className={`${agendar.submitButton}`}
-                  onClick={handleSubmit}
-                  disabled={loading || !selectedTime}
-                >
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    "Agendar Agora"
-                  )}
-                </button>
-              )}
-            </div>
-          </StyledSchedulerContainer>
-        </LocalizationProvider>
-      </main>
+                {availableTimes.length > 0 && (
+                  <button
+                    className={`${agendar.submitButton}`}
+                    onClick={handleSubmit}
+                    disabled={loading || !selectedTime}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "Agendar Agora"
+                    )}
+                  </button>
+                )}
+              </div>
+            </StyledSchedulerContainer>
+          </LocalizationProvider>
+        </main>
 
-      {/* Snackbar para feedback ao usuário */}
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
           onClose={handleSnackbarClose}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleSnackbarClose}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </div>
     </>
   );
 };
