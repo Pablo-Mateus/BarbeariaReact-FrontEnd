@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Footer from "../utilitarios/Footer";
 import Header from "../utilitarios/Header";
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const getToken = () => {
   const token = localStorage.getItem("token");
   return token;
@@ -25,7 +26,7 @@ const PrivateRoute = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:5000/check-auth", {
+        const response = await fetch(`${urlAPI}/check-auth`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

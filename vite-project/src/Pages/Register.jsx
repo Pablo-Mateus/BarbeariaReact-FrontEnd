@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../utilitarios/Header";
 import Footer from "../utilitarios/Footer";
 import { CircularProgress, Snackbar, Alert } from "@mui/material"; // Importar do MUI para feedback
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const Register = () => {
   const navigate = useNavigate();
   const [nome, setNome] = useState("");
@@ -139,7 +139,7 @@ const Register = () => {
 
     setIsLoading(true); // Ativa o estado de carregamento
     try {
-      const response = await fetch("http://localhost:5000/auth/register", {
+      const response = await fetch(`${urlAPI}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

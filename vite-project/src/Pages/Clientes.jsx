@@ -5,7 +5,7 @@ import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
 import { NavLink } from "react-router-dom";
 import agendamentos from "../styles/Agendamentos.module.css";
 import Footer from "../utilitarios/Footer";
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const Clientes = () => {
   const token = localStorage.getItem("token");
   const [agendamentosList, setAgendamentosList] = React.useState([]);
@@ -15,7 +15,7 @@ const Clientes = () => {
   React.useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const request = await fetch("http://localhost:5000/showSchedule", {
+        const request = await fetch(`${urlAPI}/showSchedule`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ const Clientes = () => {
     if (!confirmCancel) return;
 
     try {
-      const request = await fetch("http://localhost:5000/cancelSchedule", {
+      const request = await fetch(`${urlAPI}/cancelSchedule`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

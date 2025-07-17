@@ -3,6 +3,7 @@ import Header from "../utilitarios/Header";
 import Footer from "../utilitarios/Footer";
 import global from "../styles/Global.module.css";
 import { Outlet, Navigate, useNavigate } from "react-router-dom";
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const getToken = () => {
   const token = localStorage.getItem("token");
   return token;
@@ -19,7 +20,7 @@ const MainLayout = () => {
 
   if (token) {
     const checkAuth = async () => {
-      const response = await fetch("http://localhost:5000/check-auth", {
+      const response = await fetch(`${urlAPI}/check-auth`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 
 // Opcional: Funções de serviço para a API de autenticação (para login/logout/checkAuth)
-// Você pode reutilizar ou adaptar seu authService.js
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const authService = {
   getToken: () => localStorage.getItem("token"),
   setToken: (token) => localStorage.setItem("token", token),
@@ -16,7 +16,7 @@ const authService = {
     if (!token) return { isAuthenticated: false, user: null };
 
     try {
-      const response = await fetch("http://localhost:5000/check-auth", {
+      const response = await fetch(`${urlAPI}/check-auth`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -40,7 +40,7 @@ const authService = {
 
   // Exemplo de função de login (simplificado)
   login: async (email, password) => {
-    const response = await fetch("http://localhost:5000/auth/login", {
+    const response = await fetch(`${urlAPI}/auth/login`, {
       /* ... */
     });
     const data = await response.json();

@@ -2,6 +2,7 @@ import React from "react";
 import global from "../styles/Global.module.css";
 import register from "../styles/Register.module.css";
 import { replace, useNavigate } from "react-router-dom";
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const ForgotPass = () => {
   const params = new URLSearchParams(window.location.search);
   const token = params.get("token");
@@ -21,7 +22,7 @@ const ForgotPass = () => {
   async function request(event) {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:5000/changePass", {
+    const response = await fetch(`${urlAPI}/changePass`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

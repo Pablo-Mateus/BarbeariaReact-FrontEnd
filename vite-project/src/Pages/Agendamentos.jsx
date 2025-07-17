@@ -7,18 +7,15 @@ import agendamentos from "../styles/Agendamentos.module.css";
 import Footer from "../utilitarios/Footer";
 import { CircularProgress, Snackbar, Alert, Button } from "@mui/material";
 import ArchiveConfirmationModal from "../utilitarios/ConfirmationModal";
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const Agendamentos = () => {
   const token = localStorage.getItem("token");
   const [agendamentosList, setAgendamentosList] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState("all"); // 'all', 'Pendente', 'Aceito', 'Cancelado'
  const [showArchiveModal, setShowArchiveModal] = React.useState(false); // Novo estado para controlar o modal
-  const [agendamentoToArchiveId, setAgendamentoToArchiveId] = React.useState(null); // Opcional: Para arquivar um item específico
-
 
   // Função para abrir o modal
   const handleOpenArchiveModal = (agendamentoId) => { // Pode ser para um ID específico ou para todos os cancelados
-    setAgendamentoToArchiveId(agendamentoId); // Armazena o ID se for específico
     setShowArchiveModal(true);
   };
 
@@ -30,36 +27,29 @@ const Agendamentos = () => {
 
   // Função que será chamada quando o usuário CONFIRMAR o arquivamento no modal
   const handleConfirmArchive = async () => {
-    // Feche o modal primeiro
+
     setShowArchiveModal(false);
 
     // --- AQUI VAI SUA LÓGICA DE FETCH PARA ARQUIVAR OS AGENDAMENTOS ---
     // (Esta é a rota que criamos: /api/user/archiveAppointment ou /api/user/archiveCanceledSchedules)
     try {
-      const response = await fetch("http://localhost:5000/api/user/archiveCanceledSchedules", { // ou /api/user/archiveAppointment
+      const response = await fetch(`${urlAPI}/archiveCanceledSchedules`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("token")}`, // Envie o token
         },
-        // Se você precisa arquivar um ID específico:
-        // body: JSON.stringify({ agendamentoId: agendamentoToArchiveId }),
-        // Se arquiva todos os cancelados do usuário logado: não precisa de body
       });
       const data = await response.json();
-      alert(data.message); // Ou exiba uma notificação mais amigável
+      alert(data.message);
 
       if (response.ok) {
-        // Recarregar os agendamentos para atualizar a lista após o arquivamento
-        // (Você precisaria tornar showSchedule uma função para chamar aqui)
-        // Exemplo: showSchedule(); // Se showSchedule for useCallback ou uma função externa
+
         window.location.reload(); // Recarregar a página para simplificar a atualização da lista
       }
     } catch (error) {
       console.error("Erro ao arquivar agendamentos:", error);
       alert("Erro ao tentar arquivar agendamentos. Tente novamente.");
-    } finally {
-      setAgendamentoToArchiveId(null); // Limpa o ID
     }
   };
 
@@ -67,7 +57,7 @@ const Agendamentos = () => {
   React.useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const request = await fetch("http://localhost:5000/showSchedule", {
+        const request = await fetch(`${urlAPI}/showSchedule`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -98,7 +88,7 @@ const Agendamentos = () => {
     if (!confirmCancel) return;
 
     try {
-      const request = await fetch("http://localhost:5000/cancelSchedule", {
+      const request = await fetch(`${urlAPI}/cancelSchedule`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,6 +119,10 @@ const Agendamentos = () => {
 
   // Função para filtrar os agendamentos com base no status
   const filteredAgendamentos = agendamentosList.filter((agendamento) => {
+
+    if (agendamento.isArchived) {
+      return false;
+    }
     if (filterStatus === "all") {
       return true;
     }
@@ -183,10 +177,10 @@ const Agendamentos = () => {
           </button>
         
         <button
-          className={agendamentos.filterButton} /* O botão "Limpar Agendamentos Cancelados" */
-          onClick={handleOpenArchiveModal} // <--- CHAMA A FUNÇÃO PARA ABRIR O MODAL
+          className={agendamentos.filterButton}
+          onClick={handleOpenArchiveModal}
         >
-          Limpar Agendamentos Cancelados
+          Arquivar agendamentos Cancelados
         </button>
         </div>
 
@@ -196,7 +190,7 @@ const Agendamentos = () => {
               <li
                 key={agendamento._id}
                 className={`${agendamentos.agendamentoItem} ${
-                  agendamento.status.includes("Cancelado")
+                  agendamento.status.includes("Cancelado") 
                     ? agendamentos.cancelado
                     : agendamento.status === "Aceito"
                     ? agendamentos.aceito

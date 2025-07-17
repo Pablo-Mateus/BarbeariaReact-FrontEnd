@@ -12,7 +12,7 @@ import { Box, Typography, CircularProgress } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 // --- CONSTANTES (MOVIDAS PARA FORA DO COMPONENTE) ---
 const PRIMARY_BLUE = "#212F3D";
 const ACCENT_GOLD = "#FFD700";
@@ -105,7 +105,7 @@ const DefinirHorario = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/getTimes", {
+      const response = await fetch(`${urlAPI}/getTimes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dia: diaTraduzido }),
@@ -194,7 +194,7 @@ const DefinirHorario = () => {
         console.log("Horário a ser enviado:", horario);
 
         const request = async () => {
-          const response = await fetch("http://localhost:5000/DefinirHorario", {
+          const response = await fetch(`${urlAPI}/DefinirHorario`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

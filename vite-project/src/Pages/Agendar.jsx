@@ -12,7 +12,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { CircularProgress, Snackbar, Alert, Button } from "@mui/material"; // Para loading e feedback
 import agendamentos from "../styles/Agendamentos.module.css";
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 // Cores base para o tema, importadas ou definidas aqui
 const PRIMARY_BLUE = "#212F3D";
 const ACCENT_GOLD = "#FFD700";
@@ -97,7 +97,7 @@ const Agendar = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:5000/getTimes", {
+        const response = await fetch(`${urlAPI}/getTimes`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -157,7 +157,7 @@ const Agendar = () => {
     };
     console.log(agendamentoData);
     try {
-      const response = await fetch("http://localhost:5000/createSchedule", {
+      const response = await fetch(`${urlAPI}/createSchedule`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

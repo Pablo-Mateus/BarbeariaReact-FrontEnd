@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../assets/Captura de tela 2024-09-02 141005 1LOGO.svg";
 import header from "../styles/Header.module.css";
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 import global from "../styles/Global.module.css";
 import appStyles from "../styles/App.module.css"; // Importa os estilos da HomePage para reutilização
 import { NavLink, useNavigate } from "react-router-dom";

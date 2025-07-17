@@ -5,7 +5,7 @@ import styles from "../styles/App.module.css";
 import global from "../styles/Global.module.css";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 // Dados dos serviços (modelo para que você possa adicionar/editar facilmente)
 const SERVICES_DATA = [
   {

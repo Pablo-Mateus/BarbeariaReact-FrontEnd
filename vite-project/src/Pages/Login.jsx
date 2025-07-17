@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Header from "../utilitarios/Header"; // Adicionado Header
 import Footer from "../utilitarios/Footer"; // Adicionado Footer
 import { CircularProgress, Snackbar, Alert } from "@mui/material"; // Importar do MUI para feedback
-
+const urlAPI = import.meta.env.VITE_API_BASE_URL
 const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -77,7 +77,7 @@ const Login = () => {
     });
 
     try {
-      const response = await fetch("http://localhost:5000/resetPassword", {
+      const response = await fetch(`${urlAPI}/resetPassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ const Login = () => {
     setSnackbar({ open: true, message: "Autenticando...", severity: "info" });
 
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch(`${urlAPI}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
