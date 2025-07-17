@@ -1,0 +1,147 @@
+/* src/styles/ArchiveConfirmationModal.module.css */
+
+/* Cores (reutilizando suas constantes) */
+:root {
+  --primary-blue: #212f3d;
+  --accent-gold: #ffd700;
+  --text-dark: #333333;
+  --text-light: #eeeeee;
+  --light-grey-bg: #f8f8f8;
+  --red-cancel: #e74c3c;
+  --red-cancel-hover: #c0392b;
+}
+
+/* Overlay do Modal (fundo escuro transparente) */
+.modalOverlay {
+  position: fixed; /* Fixado na viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semi-transparente */
+  display: flex; /* Centraliza o conteúdo com flexbox */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que o modal fique acima de outros elementos */
+  backdrop-filter: blur(3px); /* Efeito de blur no fundo (opcional, moderno) */
+}
+
+/* Conteúdo do Modal (a caixa branca) */
+.modalContent {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px; /* Bordas arredondadas */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Sombra mais forte para destaque */
+  width: 90%; /* Largura no mobile */
+  max-width: 450px; /* Largura máxima em desktop */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaçamento entre os elementos internos */
+  animation: fadeInScale 0.3s ease-out; /* Animação de entrada */
+}
+
+/* Título do Modal */
+.modalTitle {
+  font-size: 1.8rem;
+  color: var(--primary-blue);
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Mensagem do Modal */
+.modalMessage {
+  font-size: 1rem;
+  color: var(--text-dark);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Texto de Aviso dentro da mensagem */
+.warningText {
+  color: var(--red-cancel); /* Cor de aviso */
+  font-weight: bold;
+  display: block; /* Garante que o texto de aviso vá para nova linha */
+  margin-top: 10px;
+}
+
+/* Contêiner dos Botões */
+.modalActions {
+  display: flex;
+  justify-content: center; /* Centraliza os botões */
+  gap: 15px; /* Espaçamento entre os botões */
+  margin-top: 20px;
+}
+
+/* Estilo Base dos Botões */
+.button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Estilo do Botão Confirmar */
+.confirmButton {
+  background-color: var(--primary-blue);
+  color: var(--text-light);
+}
+
+.confirmButton:hover {
+  background-color: var(--accent-gold); /* Dourado no hover */
+  color: var(--text-dark); /* Texto escuro no hover */
+  transform: translateY(-2px);
+}
+
+/* Estilo do Botão Cancelar */
+.cancelButton {
+  background-color: var(--light-grey-bg);
+  color: var(--text-dark);
+  border: 1px solid #ccc;
+}
+
+.cancelButton:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+/* --- Animação de Entrada --- */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- Responsividade (Ajustes para telas muito pequenas) --- */
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 20px;
+    width: 95%;
+  }
+
+  .modalTitle {
+    font-size: 1.5rem;
+  }
+
+  .modalMessage {
+    font-size: 0.95rem;
+  }
+
+  .modalActions {
+    flex-direction: column; /* Botões empilhados em telas muito pequenas */
+    gap: 10px;
+  }
+
+  .button {
+    width: 100%; /* Botões ocupam a largura total */
+    padding: 10px;
+  }
+}

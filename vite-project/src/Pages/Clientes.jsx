@@ -151,6 +151,12 @@ const Clientes = () => {
                         agendamento.servico.slice(1)}
                     </span>
                   </h3>
+                   <p>Nome:
+                    <span>
+                      {agendamento.nome.charAt(0).toUpperCase() +
+                        agendamento.nome.slice(1)}
+                    </span>
+                  </p>
                   <p>
                     Data:{" "}
                     <span>
