@@ -250,7 +250,7 @@ const Agendamentos = () => {
                   </p>
                 </div>
                 {!agendamento.status.includes("Cancelado") &&
-                  agendamento.status !== "Aceito" && ( // Apenas permite cancelar se não for cancelado nem aceito
+                   ( // Apenas permite cancelar se não for cancelado
                     <button
                       className={agendamentos.cancelButton}
                       onClick={() => handleCancelarAgendamento(agendamento._id)}

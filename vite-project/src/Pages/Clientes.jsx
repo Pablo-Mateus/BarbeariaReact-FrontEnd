@@ -10,7 +10,7 @@ const Clientes = () => {
   const token = localStorage.getItem("token");
   const [agendamentosList, setAgendamentosList] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState("all"); // 'all', 'Pendente', 'Aceito', 'Cancelado'
-
+  const [confirmStatus, setConfirmStatus] = React.useState("Aceitar")
   // Efeito para carregar os agendamentos ao montar o componente
   React.useEffect(() => {
     const fetchSchedules = async () => {
@@ -35,7 +35,7 @@ const Clientes = () => {
       }
     };
     fetchSchedules();
-  }, [token]); // Dependência no token para recarregar se ele mudar
+  }, [token,confirmStatus]); // Dependência no token para recarregar se ele mudar
 
   // Função para cancelar um agendamento
   async function handleCancelarAgendamento(agendamentoId) {
@@ -71,6 +71,29 @@ const Clientes = () => {
     } catch (error) {
       console.error("Erro ao enviar requisição de cancelamento:", error);
       alert("Erro de conexão ao tentar cancelar o agendamento.");
+    }
+  }
+
+  //Função para aceitar agendamentos.
+  async function handleConfirmarAgendamento(agendamentoId) {
+  setConfirmStatus("Aguarde")
+    try{
+    const response = await fetch(`${urlAPI}/confirmSchedule`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+
+      },
+      body: JSON.stringify({ agendamentoId }),
+    })
+    const data = await response.json()
+    if(response.ok) {
+      alert(data.message)
+      fetchSchedules();
+    }
+    }catch(err){
+    console.log(err)
     }
   }
 
@@ -195,13 +218,20 @@ const Clientes = () => {
                   </p>
                 </div>
                 {!agendamento.status.includes("Cancelado") &&
-                  agendamento.status !== "Aceito" && ( // Apenas permite cancelar se não for cancelado nem aceito
-                    <button
+                 ( // Apenas permite cancelar se não for cancelado nem aceito
+                    <>
+                        <button
                       className={agendamentos.cancelButton}
                       onClick={() => handleCancelarAgendamento(agendamento._id)}
                     >
                       Cancelar Agendamento
                     </button>
+                      {!agendamento.status.includes("Aceito") &&  <button className={agendamentos.buttonAccept}
+                                                                          onClick={() => handleConfirmarAgendamento(agendamento._id)}>
+                        {confirmStatus}
+                      </button>}
+
+                    </>
                   )}
               </li>
             ))}
