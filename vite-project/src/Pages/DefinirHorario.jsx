@@ -121,15 +121,7 @@ const DefinirHorario = () => {
         setHorariosBackend(fetchedHorarios);
         setDisponiveis(fetchedDisponiveis);
 
-        if (fetchedHorarios.length > 0) {
-          setInicio(dayjs(`2000-01-01T${fetchedHorarios[0]}`));
-          setFim(
-            dayjs(`2000-01-01T${fetchedHorarios[fetchedHorarios.length - 1]}`)
-          );
-        } else {
-          setInicio(null);
-          setFim(null);
-        }
+
 
         if (fetchedInterval !== null && fetchedInterval !== "") {
           const minutosIntervalo = parseInt(fetchedInterval, 10);
