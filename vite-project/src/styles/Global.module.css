@@ -28,17 +28,16 @@ body {
 
 .pai {
   display: flex;
-
   flex-direction: column;
   flex: 1; /* Permite que o .pai ocupe o espaço restante no body flex */
   width: 100%; /* Garante que o .pai ocupe 100% da largura disponível */
+  min-height: 100vh;
 }
 
 /* Ocupa o espaço restante verticalmente */
 main {
   flex: 1;
   width: 100%; /* Garante que o main ocupe 100% da largura */
-  box-sizing: border-box; /* Inclui padding e border na largura */
 }
 
 /* Contêiner para centralizar e adicionar padding ao conteúdo */

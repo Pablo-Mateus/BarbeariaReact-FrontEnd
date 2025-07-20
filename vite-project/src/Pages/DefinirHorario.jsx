@@ -12,7 +12,7 @@ import { Box, Typography, CircularProgress } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-const urlAPI = import.meta.env.VITE_API_BASE_URL
+const urlAPI = import.meta.env.VITE_API_BASE_URL;
 // --- CONSTANTES (MOVIDAS PARA FORA DO COMPONENTE) ---
 const PRIMARY_BLUE = "#212F3D";
 const ACCENT_GOLD = "#FFD700";
@@ -32,7 +32,6 @@ const DIAS_DA_SEMANA_MAP = {
 
 // --- COMPONENTES ESTILIZADOS ---
 const StyledMainContent = styled("main")(({ theme }) => ({
-  maxWidth: "1000px",
   margin: "40px auto",
   padding: "0 20px",
   display: "flex",
@@ -65,20 +64,12 @@ const StyledForm = styled("form")(({ theme }) => ({
 }));
 
 const DefinirHorario = () => {
-
   const token = localStorage.getItem("token");
   const [diaSemana, setDiaSemana] = React.useState("Segunda");
-  const [inicio, setInicio] = React.useState(
-    dayjs().set("hour", 9).startOf("hour")
-  );
-  const [fim, setFim] = React.useState(dayjs().set("hour", 18).startOf("hour"));
-  const [intervalo, setIntervalo] = React.useState(
-    dayjs().startOf("day").set("minute", 15)
-  );
+  const [inicio, setInicio] = React.useState(null);
+  const [fim, setFim] = React.useState(null);
+  const [intervalo, setIntervalo] = React.useState(null);
   const [resposta, setResposta] = React.useState("");
-  const [horariosBackend, setHorariosBackend] = React.useState([]);
-  const [disponiveis, setDisponiveis] = React.useState([]);
-  const [isLoadingTimes, setIsLoadingTimes] = React.useState(true);
   const [fetchError, setFetchError] = React.useState(null);
 
   // --- HOOKS MUI ---
@@ -87,21 +78,16 @@ const DefinirHorario = () => {
 
   // --- FUNÇÃO PARA CARREGAR HORÁRIOS DO BACKEND (useCallback) ---
   const fetchTimes = React.useCallback(async () => {
-    setIsLoadingTimes(true);
     setFetchError(null);
-    setHorariosBackend([]);
-    setDisponiveis([]);
     setInicio(null);
     setFim(null);
     setIntervalo(null);
-
     try {
       const diaTraduzido = DIAS_DA_SEMANA_MAP[diaSemana];
 
       if (!diaTraduzido) {
         console.warn(`Dia da semana não reconhecido: ${diaSemana}`);
         setFetchError("Dia da semana inválido para busca de horários.");
-        setIsLoadingTimes(false);
         return;
       }
 
@@ -113,17 +99,15 @@ const DefinirHorario = () => {
 
       const data = await response.json();
 
-      if (response.ok) {
-        const fetchedHorarios = data.horarios || [];
-        const fetchedInterval = data.intervalo || null;
-        const fetchedDisponiveis = data.disponiveis || [];
+      if (data.inicio && data.fim) {
+        const fetchedInicio = dayjs(`2000-01-01T${data.inicio}`);
+        const fetchedFim = dayjs(`2000-01-01T${data.fim}`);
 
-        setHorariosBackend(fetchedHorarios);
-        setDisponiveis(fetchedDisponiveis);
+        setInicio(fetchedInicio);
+        setFim(fetchedFim);
 
-
-
-        if (fetchedInterval !== null && fetchedInterval !== "") {
+        const fetchedInterval = data.intervalo;
+        if (fetchedInterval) {
           const minutosIntervalo = parseInt(fetchedInterval, 10);
           if (!isNaN(minutosIntervalo)) {
             setIntervalo(
@@ -138,23 +122,20 @@ const DefinirHorario = () => {
       } else {
         setResposta(data.message || "Erro ao carregar horários do servidor.");
         setFetchError(data.message || `Erro no servidor: ${response.status}`);
-        setHorariosBackend([]);
-        setDisponiveis([]);
         setInicio(null);
         setFim(null);
         setIntervalo(null);
+        setTimeout(() => {
+          setResposta("");
+        }, 3000);
       }
     } catch (err) {
       console.error("Erro na requisição getTimes:", err);
       setResposta("Erro de conexão.");
       setFetchError("Erro de conexão ao buscar horários.");
-      setHorariosBackend([]);
-      setDisponiveis([]);
       setInicio(null);
       setFim(null);
       setIntervalo(null);
-    } finally {
-      setIsLoadingTimes(false);
     }
   }, [diaSemana]);
 
@@ -210,7 +191,6 @@ const DefinirHorario = () => {
     }
   }
 
-  // --- JSX de Renderização ---
   return (
     <>
       <StyledMainContent>
@@ -251,113 +231,44 @@ const DefinirHorario = () => {
               ))}
             </select>
           </Box>
-
-          {/* TimePickers de Início, Fim, Intervalo */}
-          {isLoadingTimes ? (
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "150px",
+                display: "grid",
+                // --- AJUSTE AQUI: flex-basis menor para mobile, para dar mais espaço ao padding ---
+                gridTemplateColumns: {
+                  xs: "minmax(0, 1fr)",
+                  sm: "repeat(auto-fit, minmax(200px, 1fr))",
+                }, // minmax(0, 1fr)
+                gap: "20px",
+                width: "100%",
               }}
             >
-              <CircularProgress sx={{ color: PRIMARY_BLUE }} />
+              <TimePicker
+                value={inicio}
+                label="Inicio"
+                onChange={(newValue) => setInicio(newValue)}
+                ampm={false}
+                sx={{ width: "100%", minWidth: 0 }}
+              />
+              <TimePicker
+                value={fim}
+                label="Fim"
+                onChange={(newValue) => setFim(newValue)}
+                ampm={false}
+                sx={{ width: "100%", minWidth: 0 }}
+              />
+              <TimePicker
+                views={["minutes"]}
+                value={intervalo}
+                label="Intervalo (minutos)"
+                timeSteps={{ minutes: 1 }}
+                onChange={(newValue) => setIntervalo(newValue)}
+                ampm={false}
+                sx={{ width: "100%", minWidth: 0 }}
+              />
             </Box>
-          ) : fetchError ? (
-            <Typography color="error">{fetchError}</Typography>
-          ) : (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box
-                sx={{
-                  display: "grid",
-                  // --- AJUSTE AQUI: flex-basis menor para mobile, para dar mais espaço ao padding ---
-                  gridTemplateColumns: {
-                    xs: "minmax(0, 1fr)",
-                    sm: "repeat(auto-fit, minmax(200px, 1fr))",
-                  }, // minmax(0, 1fr)
-                  gap: "20px",
-                  width: "100%",
-                }}
-              >
-                <TimePicker
-                  value={inicio}
-                  label="Inicio"
-                  onChange={(newValue) => setInicio(newValue)}
-                  ampm={false}
-                  // --- AJUSTE AQUI: width: '100%' e minWidth: 0 para permitir encolher ---
-                  sx={{ width: "100%", minWidth: 0 }}
-                />
-                <TimePicker
-                  value={fim}
-                  label="Fim"
-                  onChange={(newValue) => setFim(newValue)}
-                  ampm={false}
-                  sx={{ width: "100%", minWidth: 0 }}
-                />
-                <TimePicker
-                  views={["minutes"]}
-                  value={intervalo}
-                  label="Intervalo (minutos)"
-                  timeSteps={{ minutes: 1 }}
-                  onChange={(newValue) => setIntervalo(newValue)}
-                  ampm={false}
-                  sx={{ width: "100%", minWidth: 0 }}
-                />
-              </Box>
-            </LocalizationProvider>
-          )}
-
-          {/* Horários Agendados (horariosBackend) */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <Typography className={ChoseTime.label}>
-              Horários Agendados:
-            </Typography>
-            {isLoadingTimes ? (
-              <CircularProgress sx={{ color: PRIMARY_BLUE }} size={24} />
-            ) : fetchError ? (
-              <Typography color="error">{fetchError}</Typography>
-            ) : horariosBackend.length > 0 ? (
-              <select
-                className={ChoseTime.inputHoras}
-                value={horariosBackend[0]}
-              >
-                {" "}
-                {/* Valor do select, se tiver um default */}
-                {horariosBackend.map((hora) => (
-                  <option value={hora} key={hora}>
-                    {hora}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <Typography>Nenhum horário agendado para este dia.</Typography>
-            )}
-          </Box>
-
-          {/* Slots Disponíveis para Agendamento (disponiveis) */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <Typography className={ChoseTime.label}>
-              Slots Disponíveis para Agendar:
-            </Typography>
-            {isLoadingTimes ? (
-              <CircularProgress sx={{ color: PRIMARY_BLUE }} size={24} />
-            ) : fetchError ? (
-              <Typography color="error">{fetchError}</Typography>
-            ) : disponiveis.length > 0 ? (
-              <select className={ChoseTime.inputHoras}>
-                {disponiveis.map((hora) => (
-                  <option value={hora} key={hora}>
-                    {hora}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <Typography>
-                Nenhum slot disponível para agendamento neste dia.
-              </Typography>
-            )}
-          </Box>
+          </LocalizationProvider>
 
           <span className={ChoseTime.resposta}>{resposta}</span>
           <button type="submit" className={ChoseTime.button}>

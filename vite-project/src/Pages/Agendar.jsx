@@ -12,7 +12,9 @@ import { styled, useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { CircularProgress, Snackbar, Alert, Button } from "@mui/material"; // Para loading e feedback
 import agendamentos from "../styles/Agendamentos.module.css";
-const urlAPI = import.meta.env.VITE_API_BASE_URL
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+dayjs.extend(isSameOrAfter);
+const urlAPI = import.meta.env.VITE_API_BASE_URL;
 // Cores base para o tema, importadas ou definidas aqui
 const PRIMARY_BLUE = "#212F3D";
 const ACCENT_GOLD = "#FFD700";
@@ -50,6 +52,7 @@ const Agendar = () => {
   const [selectedTime, setSelectedTime] = useState(null); // Horário selecionado pelo usuário
   const [loading, setLoading] = useState(false);
   const [carregando, setCarregando] = useState(true);
+  const now = dayjs();
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -97,18 +100,20 @@ const Agendar = () => {
       }
 
       try {
-        const response = await fetch(`${urlAPI}/getTimes`, {
+        const response = await fetch(`${urlAPI}/dayAvailability`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ dia: diaFormatado }),
+          body: JSON.stringify({
+            dia: diaFormatado,
+            date: selectedDate.format("YYYY-MM-DD"),
+          }),
         });
 
         const data = await response.json();
-
         if (response.ok) {
-          const fetchedTimes = data.disponiveis || [];
+          const fetchedTimes = data.horarios || [];
           setAvailableTimes(fetchedTimes);
           if (fetchedTimes.length > 0) {
             setSelectedTime(fetchedTimes[0]); // Seleciona o primeiro horário disponível por padrão
@@ -153,7 +158,7 @@ const Agendar = () => {
       servico: servicoParam,
       hora: Number(tempoServicoParam), // Duração do serviço (certifique-se de que é um número)
       diaSemana: diasSemana[selectedDate.format("ddd")],
-      date: selectedDate.$d,
+      date: selectedDate.format("YYYY-MM-DD"),
     };
     console.log(agendamentoData);
     try {
@@ -289,7 +294,8 @@ const Agendar = () => {
                     <CircularProgress size={40} sx={{ color: PRIMARY_BLUE }} />
                     <p>Carregando horários...</p>
                   </div>
-                ) : availableTimes.length > 0 ? (
+                ) : availableTimes.length > 0 &&
+                  selectedDate.isSameOrAfter(now, "day") ? (
                   <div className={agendar.timeButtonsContainer}>
                     {availableTimes.map((time) => (
                       <button
@@ -299,7 +305,9 @@ const Agendar = () => {
                         }`}
                         onClick={() => setSelectedTime(time)}
                       >
-                        {time}
+                        {`${Math.floor(time / 60)}:${(time % 60)
+                          .toString()
+                          .padStart(2, "0")}`}
                       </button>
                     ))}
                   </div>
@@ -316,7 +324,7 @@ const Agendar = () => {
                     <button
                       className={`${agendar.submitButton}`}
                       onClick={handleSubmit}
-                      disabled={loading || !selectedTime}
+                      disabled={loading}
                     >
                       {loading ? (
                         <CircularProgress size={24} color="inherit" />
@@ -325,7 +333,7 @@ const Agendar = () => {
                       )}
                     </button>
                   ) : (
-                    <button  className={`${agendar.submitButton}`}>
+                    <button className={`${agendar.submitButton}`}>
                       <NavLink to="/Agendamentos">
                         Ir para meus agendamentos
                       </NavLink>
