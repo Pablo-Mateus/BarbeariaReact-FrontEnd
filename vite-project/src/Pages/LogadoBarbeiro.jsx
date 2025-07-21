@@ -66,7 +66,7 @@ const Logado = () => {
 
   return (
     <>
-      <form action="">
+      {/* <form action="">
         <h1>Criar serviços</h1>
         <label htmlFor="servico">Serviço:</label>
         <input type="text" placeholder="Ex: corte de cabelo" id="servico" />
@@ -76,7 +76,7 @@ const Logado = () => {
         <input type="number" id="preco" placeholder="R$00,00" />
          <label htmlFor="duracao">Duração:</label>
         <input type="number" id="duracao" placeholder="Em minutos ex: 45" />
-      </form>
+      </form> */}
       <main className={`${appStyles.heroSection} ${appStyles.bgServicos}`}>
         <section className={`${global.container} ${appStyles.servicosContent}`}>
           <div className={appStyles.introText}>
